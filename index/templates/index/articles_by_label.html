@@ -1,0 +1,77 @@
+{% extends 'index/index.html' %}
+
+{% block nav %}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8">
+        <div class="card">
+            <div class="card-header">
+                <span>关于 <strong>{{ label }}</strong> 标签，共 <strong>{{ article_label|length }}</strong> 文章如下：</span>
+            </div>
+            <div class="card-body">
+                {% if article_label %}
+                {% for article_label in article_label %}
+                <div class="list-group">
+                    <div class="list-group-item">
+                        <h4>
+                            <a class="text-dark font-italic font-weight-bold"
+                            href="{% url 'index:article_body' article_label.id %}">{{ article_label.title }}</a>
+                        </h4>
+                        <span class="text-muted">
+                            posted @ {{ article_label.pub_date|date:'Y-m-d H:i' }}
+                            &ensp; {{ article_label.author }}
+                            &ensp; <i class="fa fa-eye" aria-hidden="true"></i> {{ article_label.views }}
+                        </span>
+                    </div>
+                </div>
+                <div class="row my-1"></div>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-0 col-md-0 col-lg-4 col-xl-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>{{ label_to_articles|length }} 个标签如下：</h5>
+            </div>
+            <div class="card-body">
+                {% if label_to_articles %}
+                {% for label, articles in label_to_articles.items %}
+                    <a class="text-dark font-italic" href="{% url 'index:get_articles_by_label' label %}">
+                        <div class="list-group-item">
+                            {{ label }}
+                            <div class="float-right">
+                                {{ articles|length }}
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="row my-1"></div>
+        <div class="card">
+            <div class="card-header">
+                <h5>{{ year_to_articles|length }} 个年份如下：</h5>
+            </div>
+            <div class="card-body">
+                {% if year_to_articles %}
+                {% for year, articles in year_to_articles.items %}
+                <a class="text-dark font-italic" href="{% url 'index:get_articles_by_year' year %}">
+                    <div class="list-group-item">
+                        {{ year }}
+                        <div class="float-right">
+                            {{ articles|length }}
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
