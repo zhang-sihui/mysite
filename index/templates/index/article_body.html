@@ -9,20 +9,20 @@
             <div class="card-header">
                 <h1>{{ article.title }}</h1>
                 <small>
-                    <i class="fa fa-user-o" aria-hidden="true"></i> {{ article.author }} &ensp;
+                    <i class="fa-solid fa-user"></i> {{ article.author }} &ensp;
                     <a class="text-dark" href="#" data-toggle="tooltip" data-html="true" data-placement="bottom"
                         title="发布：{{ article.pub_date|date:'Y-m-d H:i:s' }} <br> 修改：{{ article.mod_date|date:'Y-m-d H:i:s' }}">
-                        <span> <i class="fa fa-calendar" aria-hidden="true"></i> {{ article.pub_date|date:'Y-m-d H:i' }} </span>
+                        <span> <i class="fa fa-calendar"></i> {{ article.pub_date|date:'Y-m-d H:i' }} </span>
                     </a> &ensp;
                     <script>
                         $(document).ready(function () {
                             $('[data-toggle="tooltip"]').tooltip();
                         });
                     </script>
-                    <i class="fa fa-tag" aria-hidden="true"></i>
+                    <i class="fa fa-tag"></i>
                     <a class="text-dark font-italic"
                         href="{% url 'index:get_articles_by_label' article.category %}"> {{ article.category }}</a> &ensp;
-                    <i class="fa fa-eye" aria-hidden="true"></i> {{ article.views }}
+                    <i class="fa fa-eye"></i> {{ article.views }}
                 </small>
             </div>
             <div class="card-body">

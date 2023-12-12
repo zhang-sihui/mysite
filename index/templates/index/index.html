@@ -6,8 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Index</title>
     <link rel="shortcut icon" href="/static/favicon.ico">
-    <link href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.staticfile.org/twitter-bootstrap/4.4.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
     <script src="https://cdn.staticfile.org/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/4.4.0/js/bootstrap.bundle.min.js"></script>
 </head>
@@ -18,13 +19,13 @@
         <div class="row">
             <div class="col-4 col-sm-2 col-md-2 offset-sm-3 offset-md-3 text-center">
                 <a class="text-dark" href="{% url 'index:about_site' %}" target="_blank">
-                    <i class="fa fa-yelp fa-3x" aria-hidden="true"></i>
+                    <i class="fa-solid fa-circle-info fa-3x"></i>
                     <p>AboutSite</p>
                 </a>
             </div>
             <div class="col-4 col-sm-2 col-md-2 text-center">
                 <a class="text-dark" href="{% url 'index:articles' %}" target="_blank">
-                    <i class="fa fa-pencil-square fa-3x" aria-hidden="true"></i>
+                    <i class="fa fa-pencil-square fa-3x"></i>
                     <p>Articles</p>
                 </a>
             </div>
@@ -35,9 +36,9 @@
         <div class="col-sm-8 col-md-6 offset-sm-2 offset-md-3">
             <div class="card">
                 <div class="card-body">
-                    <div><i class="fa fa-vimeo-square" aria-hidden="true"></i> Today Visits: {{ today_visits.visits }}</div>
-                    <div><i class="fa fa-vimeo" aria-hidden="true"></i> Total Visits: {{ total_visits.visits__sum }}</div>
-                    <div><i class="fa fa-clock-o" aria-hidden="true"></i> Beijing Time: {{ localtime|date:'Y-m-d H:i:s' }}</div>
+                    <div><i class="fa-regular fa-eye"></i> Today Visits: {{ today_visits.visits }}</div>
+                    <div><i class="fa-solid fa-eye"></i> Total Visits: {{ total_visits.visits__sum }}</div>
+                    <div><i class="fa-solid fa-clock"></i> Beijing Time: {{ localtime|date:'Y-m-d H:i:s' }}</div>
                 </div>
             </div>
         </div>
