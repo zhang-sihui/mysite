@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UserIP, Visit, AboutSite, Article
+from .models import UserIP, Visit, About, Article, Comment
 
 
 # Register your models here.
@@ -32,7 +32,7 @@ class VisitAdmin(admin.ModelAdmin):
 admin.site.register(Visit, VisitAdmin)
 
 
-class AboutSiteAdmin(admin.ModelAdmin):
+class AboutAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {'fields': ['title']}),
         ('Date information', {'fields': ['pub_date'], 'classes': ['collapse']}),
@@ -42,7 +42,7 @@ class AboutSiteAdmin(admin.ModelAdmin):
     search_fields = ['title']
     list_filter = ['pub_date']
 
-admin.site.register(AboutSite, AboutSiteAdmin)
+admin.site.register(About, AboutAdmin)
 
 
 class ArticlesAdmin(admin.ModelAdmin):
@@ -55,10 +55,28 @@ class ArticlesAdmin(admin.ModelAdmin):
         ('Date information', {'fields': ['mod_date'], 'classes': ['collapse']}),
         (None, {'fields': ['body']}),
     ]
-    # list_display = ('title', 'author', 'category', 'pub_date', 'state')
     list_display = ('title', 'author', 'category', 'pub_date', 'state', 'latest_viewing_date', 'latest_viewing_user')
     list_filter = ['pub_date']
     search_fields = ['title']
 
 
 admin.site.register(Article, ArticlesAdmin)
+
+
+class CommentAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (None, {'fields': ['author']}),
+        (None, {'fields': ['email']}),
+        (None, {'fields': ['ip']}),
+        (None, {'fields': ['ip_attribution']}),
+        ('Date information', {'fields': ['sub_date'], 'classes': ['collapse']}),
+        (None, {'fields': ['content']}),
+        (None, {'fields': ['parent_id']}),
+        (None, {'fields': ['delete']}),
+    ]
+    list_display = ('id', 'author', 'email', 'ip', 'ip_attribution', 'sub_date', 'content', 'parent_id', 'delete')
+    list_filter = ['sub_date']
+    search_fields = ['author', 'content']
+
+
+admin.site.register(Comment, CommentAdmin)

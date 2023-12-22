@@ -4,7 +4,7 @@ import urllib.request
 from django.db.models import Sum
 from django.shortcuts import render
 from django.utils import timezone
-from .models import UserIP, Visit, AboutSite
+from .models import UserIP, Visit, About
 
 # Create your views here.
 
@@ -87,7 +87,7 @@ def get_ip_attribution(ip):
 
 def about_site(request):
     # 返回日期最近的一条
-    about_site = AboutSite.objects.all().order_by('-pub_date').first()
+    about_site = About.objects.all().order_by('-pub_date').first()
     if about_site:
         extensions = ['markdown.extensions.extra', 'markdown.extensions.codehilite', 'markdown.extensions.toc']
         about_site.content = markdown.markdown(about_site.content, extensions=extensions)

@@ -5,7 +5,7 @@ from mdeditor.fields import MDTextField
 
 # Create your models here.
 
-class AboutSite(models.Model):
+class About(models.Model):
     title = models.CharField('标题', max_length=20)
     pub_date = models.DateTimeField('发布时间', default=timezone.now)
     content = MDTextField('内容')
@@ -41,3 +41,13 @@ class Article(models.Model):
 
     def __str__(self):
         return self.title
+
+class Comment(models.Model):
+    author = models.CharField('作者', max_length=16, default='')
+    email = models.CharField('邮箱', max_length=64, default='', blank=True, null=True)
+    content = MDTextField('内容')
+    sub_date = models.DateTimeField('创建日期', default=timezone.now)
+    ip = models.CharField('用户IP', max_length=16, default='', blank=True, null=True)
+    ip_attribution = models.CharField('IP地址', max_length=64, default='', blank=True, null=True)
+    parent_id = models.IntegerField('连接对象', default=0)
+    delete = models.BooleanField('删除', default=False)

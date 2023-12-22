@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views, article
+from . import views, article, comment
 
 app_name = 'index'
 
@@ -12,4 +12,7 @@ urlpatterns = [
     path('searchArticles', article.get_search_articles, name='get_search_articles'),
     path('articlesByLabel/<str:label>', article.get_articles_by_label, name='get_articles_by_label'),
     path('articlesByYear/<str:year>', article.get_articles_by_year, name='get_articles_by_year'),
+
+    path('comments', comment.comments, name='comments'),
+    path('add_comment', comment.add_comment, name='add_comment'),
 ]
