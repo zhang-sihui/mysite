@@ -13,7 +13,7 @@ class UserIPAdmin(admin.ModelAdmin):
     ]
     list_display = ('serial_number', 'user_ip', 'ip_attribution', 'access_time')
     list_filter = ['access_time']
-    search_fields = ['ip_attribution']
+    search_fields = ['user_ip', 'ip_attribution']
 
 
 admin.site.register(UserIP, UserIPAdmin)
@@ -23,10 +23,12 @@ class VisitAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {'fields': ['date']}),
         (None, {'fields': ['visits']}),
+        (None, {'fields': ['first_viewing_ip']}),
+        (None, {'fields': ['latest_viewing_ip']}),
     ]
-    list_display = ('date', 'visits')
+    list_display = ('date', 'visits', 'first_viewing_ip', 'latest_viewing_ip')
     search_fields = ['date']
-    list_filter = ['date']
+    list_filter = ['date', 'first_viewing_ip', 'latest_viewing_ip']
 
 
 admin.site.register(Visit, VisitAdmin)
@@ -39,7 +41,7 @@ class AboutAdmin(admin.ModelAdmin):
         (None, {'fields': ['content']}),
     ]
     list_display = ('title', 'pub_date')
-    search_fields = ['title']
+    search_fields = ['title', 'content']
     list_filter = ['pub_date']
 
 admin.site.register(About, AboutAdmin)
@@ -57,7 +59,7 @@ class ArticlesAdmin(admin.ModelAdmin):
     ]
     list_display = ('title', 'author', 'category', 'pub_date', 'state', 'latest_viewing_date', 'latest_viewing_user')
     list_filter = ['pub_date']
-    search_fields = ['title']
+    search_fields = ['title', 'author', 'category', 'pub_date', 'body']
 
 
 admin.site.register(Article, ArticlesAdmin)
@@ -76,7 +78,7 @@ class CommentAdmin(admin.ModelAdmin):
     ]
     list_display = ('id', 'author', 'email', 'ip', 'ip_attribution', 'sub_date', 'content', 'parent_id', 'delete')
     list_filter = ['sub_date']
-    search_fields = ['author', 'content']
+    search_fields = ['author', 'content', 'email']
 
 
 admin.site.register(Comment, CommentAdmin)

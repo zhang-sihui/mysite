@@ -1,0 +1,10 @@
+.custom_avatar {
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+}
+
+.custom_comment-info {
+    font-size: 12px;
+}

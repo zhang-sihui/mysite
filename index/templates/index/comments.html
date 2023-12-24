@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="row">
-    <div class="col-8">
+    <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
         <div class="card">
             <div class="card-header">
                 <span><i class="fa-regular fa-comments"></i> {{ comments|length }} 条留言</span>
@@ -15,30 +15,26 @@
                     <div class="list-group">
                         <div class="list-group-item">
                             <div class="d-inline-flex">
-                                <div class="p-2 w-10 bg-secondary text-white rounded h-25">
-                                    <!-- {{ comment.author|slice:'0:1' }} -->
-                                    <i class="fa-solid fa-face-smile"></i>
+                                <div class="bg-secondary text-white rounded custom_avatar">
+                                    {{ comment.author|slice:'0:1'|capfirst }}
                                 </div>
                                 <div class="p-2">
-                                    <div class="text-black-50">
-                                        {{ comment.author }}  {{ comment.sub_date|date:'Y-m-d H:i' }}
+                                    <div class="text-black-50 custom_comment-info">
+                                        <span class="mr-2">{{ comment.author }}</span>
+                                        <span>{{ comment.sub_date|date:'Y-m-d H:i' }}</span>
                                     </div>
-                                    <div class="font-weight-bold">
-                                        {{ comment.content }}
-                                    </div>
+                                    <div class="font-weight-bold mb-2">{{ comment.content }}</div>
                                     <div class="d-flex bd-highlight">
                                         {% if comment.reply %}
-                                            <div class="p-2 bg-secondary text-white rounded h-25">
-                                                <!-- {{ comment.reply.author|slice:'0:1' }} -->
-                                                <i class="fa-solid fa-face-smile"></i>
+                                            <div class="bg-secondary text-white rounded custom_avatar">
+                                                {{ comment.reply.author|slice:'0:1'|capfirst }}
                                             </div>
-                                            <div class="p-2 w-100 bd-highlight">
-                                                <div class="text-black-50">
-                                                    {{ comment.reply.author }} {{ comment.sub_date|date:'Y-m-d H:i' }}
+                                            <div class="p-2 bd-highlight">
+                                                <div class="text-black-50 custom_comment-info">
+                                                    <span class="mr-2">{{ comment.reply.author }}</span>
+                                                    <span>{{ comment.sub_date|date:'Y-m-d H:i' }}</span>
                                                 </div>
-                                                <div class="font-weight-bold">
-                                                    {{ comment.reply.content }}
-                                                </div>
+                                                <div class="font-weight-bold">{{ comment.reply.content }}</div>
                                             </div>
                                         {% endif %}
                                     </div>
@@ -53,26 +49,26 @@
             </div>
         </div>
     </div>
-    <div class="col-4">
+    <div class="col-sm-0 col-md-4 col-lg-4 col-xl-4">
         <form class="" method="post" action="{% url 'index:add_comment' %}">
             {% csrf_token %}
             <div class="card">
                 <div class="card-header">
-                    <span><i class="fa-regular fa-comment-dots"></i> <label>留言</label></span>
+                    <span><i class="fa-regular fa-comment-dots"></i> 留言</span>
                 </div>
                 <div class="card-body">
-                    <p>
+                    <div>
                         <i class="fa-regular fa-user"></i> {{ comment_form.author.label_tag }} <span>名字将被临时保存</span>
                         {{ comment_form.author }}
-                    </p>
-                    <p>
+                    </div>
+                    <div class="pt-2">
                         <i class="fa-regular fa-envelope"></i> {{ comment_form.email.label_tag }} <span>邮箱将被临时保存</span>
                         {{ comment_form.email }}
-                    </p>
-                    <p>
+                    </div>
+                    <div class="pt-2">
                         <i class="fa-regular fa-comment"></i> {{ comment_form.content.label_tag }} 
                         {{ comment_form.content }}
-                    </p>
+                    </div>
                     {% if error %}
                         <div class="p-3 mb-2 bg-warning text-dark my-1">
                             {{ error }}
@@ -86,5 +82,4 @@
         </form>
     </div>
 </div>
-
 {% endblock %}

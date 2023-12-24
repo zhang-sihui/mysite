@@ -14,16 +14,17 @@ def index(request):
         add_ip(user_ip)
     today_visits = get_today_visit()
     if not today_visits:
-        create_visit()
-    today_visits = add_one_visit()
+        create_visit(request)
+    today_visits = add_one_visit(request)
     total_visits = get_total_visit()
     localtime = timezone.now()
     return render(request, 'index/index.html', locals())
 
 
-def add_one_visit():
+def add_one_visit(request):
     visit = Visit.objects.get(date=timezone.localdate())
     visit.visits += 1
+    visit.latest_viewing_ip = get_user_ip(request)
     visit.save()
     return visit
 
@@ -33,8 +34,9 @@ def get_today_visit():
     return visits
 
 
-def create_visit():
+def create_visit(request):
     visit = Visit.objects.create()
+    visit.first_viewing_ip = get_user_ip(request)
     visit.save()
 
 

@@ -21,6 +21,8 @@ class UserIP(models.Model):
 class Visit(models.Model):
     date = models.DateField('日期', default=timezone.localdate)
     visits = models.IntegerField('访问量', default=0)
+    first_viewing_ip = models.CharField('首次访问ip', max_length=16, default='')
+    latest_viewing_ip = models.CharField('最新访问ip', max_length=16, default='')
 
 
 class Article(models.Model):
