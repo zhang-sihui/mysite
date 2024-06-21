@@ -18,22 +18,29 @@
     <div class="container-fluid">
         {% block nav %}
         <div class="row">
-            <div class="col-4 col-sm-2 col-md-2 offset-sm-3 offset-md-3 text-center">
+            <div class="col-3 col-sm-2 col-md-2 offset-sm-2 offset-md-2 text-center">
                 <a class="text-dark" href="{% url 'index:about_site' %}" target="_blank">
                     <i class="fa-solid fa-circle-info fa-3x"></i>
                     <p>About</p>
                 </a>
             </div>
-            <div class="col-4 col-sm-2 col-md-2 text-center">
+            <div class="col-3 col-sm-2 col-md-2 text-center">
                 <a class="text-dark" href="{% url 'index:articles' %}" target="_blank">
                     <i class="fa fa-pencil-square fa-3x"></i>
                     <p>Articles</p>
                 </a>
             </div>
-            <div class="col-4 col-sm-2 col-md-2 text-center">
+            <div class="col-3 col-sm-2 col-md-2 text-center">
                 <a class="text-dark" href="{% url 'index:comments' %}" target="_blank">
                     <i class="fa-solid fa-comment-dots fa-3x"></i>
                     <p>Messages</p>
+                </a>
+            </div>
+            <!--  -->
+            <div class="col-3 col-sm-2 col-md-2 text-center">
+                <a class="text-dark" href="{% url 'index:files' %}" target="_blank">
+                    <i class="fa-solid fa-file fa-3x"></i>
+                    <p>Files</p>
                 </a>
             </div>
         </div>

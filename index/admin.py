@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UserIP, Visit, About, Article, Comment
+from .models import UserIP, Visit, About, Article, Comment, File
 
 
 # Register your models here.
@@ -82,3 +82,18 @@ class CommentAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Comment, CommentAdmin)
+
+
+class FileAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (None, {'fields': ['file_name']}),
+        (None, {'fields': ['file_size']}),
+        (None, {'fields': ['pub_date']}),
+        (None, {'fields': ['downloads']}),
+    ]
+    list_display = ('id', 'file_name', 'file_size', 'pub_date', 'downloads')
+    list_filter = ['pub_date']
+    search_fields = ['file_name', 'pub_date']
+
+
+admin.site.register(File, FileAdmin)

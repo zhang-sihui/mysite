@@ -1,5 +1,5 @@
-from django.urls import path
-from . import views, article, comment
+from django.urls import path, re_path
+from . import views, article, comment, file
 
 app_name = 'index'
 
@@ -15,4 +15,9 @@ urlpatterns = [
 
     path('comments', comment.comments, name='comments'),
     path('add_comment', comment.add_comment, name='add_comment'),
+    # 文件
+    path('files', file.files, name='files'),
+    path('upload', file.upload, name='upload'),
+    re_path('download/(?P<file_id>\\d+)/', file.download, name='download'),
+    re_path('download_file/(?P<file_id>\\d+)/', file.download_file, name='download_file'),
 ]

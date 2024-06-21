@@ -53,3 +53,9 @@ class Comment(models.Model):
     ip_attribution = models.CharField('IP地址', max_length=64, default='', blank=True, null=True)
     parent_id = models.IntegerField('连接对象', default=0)
     delete = models.BooleanField('删除', default=False)
+
+class File(models.Model):
+    file_name = models.CharField('文件名', max_length=100)
+    file_size = models.IntegerField('文件大小', default=0)
+    pub_date = models.DateTimeField('上传日期', default=timezone.now)
+    downloads = models.IntegerField('下载数', default=0)

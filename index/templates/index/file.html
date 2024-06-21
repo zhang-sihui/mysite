@@ -1,0 +1,82 @@
+{% extends 'index/index.html' %}
+
+{% block nav %}
+<nav class="navbar navbar-expand-md bg-light navbar-light">
+    <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="{% url 'index:files' %}">下载</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'index:upload' %}">上传</a></li>
+    </ul>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <strong><span><i class="fa fa-cloud-download" aria-hidden="true"></i> {{ files|length }} 个可下载文件</span></strong>
+    </div>
+    <div class="card-body">
+        {% if files %}
+        <ul class="list-group">
+            {% for file in files_data %}
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col-lg-9 col-md-8">
+                        <div title="下载文件" class="text-nowrap text-truncate">
+                            <a class="text-dark" href="files/download/{{ file.0 }}/">
+                                <i class="fa fa-cloud-download" aria-hidden="true"></i> {{ file.1 }}
+                            </a> 
+                        </div>
+                    </div>
+                    <div class="col-lg-1 col-md-2">
+                        <div title="下载量" class="text-right"><i class="fa-solid fa-circle-chevron-down"></i> {{ file.2 }}</div>
+                    </div>
+                    <div class="col-lg-2 col-md-2">
+                        <div title="上传时间" class="text-right text-nowrap text-truncate"><i class="fa-solid fa-calendar"></i> {{ file.3 }}</div>
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+            {{ not_files_message }}
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    $(document).ready(() => {
+        const file_id = "{{ request.session.file_id|escapejs }}";
+        const file_name = "{{ request.session.file_name|escapejs }}";
+        if (file_id) {
+            // Django 的 URL，假设你有一个 URL 模式匹配这个
+            const url = `/files/download_file/${file_id}/`;
+            fetch(url, {  
+                method: 'GET',  
+                mode: 'cors',  // 如果你的 Django 后端支持 CORS，则需要这个
+                headers: {  
+                    'Content-Type': 'application/json',  // 如果你的 Django 视图需要这个
+                },  
+            }).then(response => {  
+                if (response.ok) {  
+                    // 创建一个Blob对象，它表示一个不可变、原始数据的文件对象
+                    return response.blob();
+                }  
+                throw new Error('请求失败');  
+            }).then(blob => {  
+                // 创建一个 URL 对象，它表示一个指向 File 或 Blob 对象的 URL
+                const url = window.URL.createObjectURL(blob);
+                // 创建一个 a 标签来模拟下载
+                const a = document.createElement('a');
+                a.href = url;  
+                // 设置下载的文件名 
+                a.download = file_name; 
+                a.click();
+                // 释放 URL 对象
+                window.URL.revokeObjectURL(url);
+            }).catch(error => {  
+                console.error('下载失败:', error);  
+            });
+        }
+    })
+</script>
+{% endblock %}

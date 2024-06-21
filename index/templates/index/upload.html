@@ -1,0 +1,53 @@
+{% extends 'index/index.html' %}
+
+{% block nav %}
+<nav class="navbar navbar-expand-md bg-light navbar-light">
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" href="{% url 'index:files' %}">下载</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'index:upload' %}">上传</a></li>
+        </ul>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <div class="text-center h6">
+            <span><i class="fa fa-cloud-upload" aria-hidden="true"></i> 文件上传</span>
+            <small><a class="text-dark" href="{% url 'index:upload' %}">
+                <i class="fa fa-refresh" aria-hidden="true"></i></a></small>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="col-xl-6 offset-xl-4 col-lg-6 offset-lg-4 col-md-8 offset-md-2 col-sm-12 col-12">
+            <form class="form-inline mx-auto" action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input class="form-control border border-secondary" type="text" id="textfield" style="width:200px" disabled/>
+                <label class="btn btn-light border border-secondary" for="customFile" style="margin: 3px">选择文件</label>
+                <input class="form-control" type="file" name="file" id="customFile" style="display:none;"
+                       onchange="document.getElementById('textfield').value=this.files[0].name"/>
+                <input class="btn btn-light border border-secondary" type="submit" value="  提交  "/>
+            </form>
+        </div>
+    </div>
+    <div class="card-footer">
+        {% if not_file_message %}
+            <div class="text-center"><strong class="text-info">{{ not_file_message }}</strong></div>
+        {% endif %}
+        {% if error_file_name_message %}
+            <div class="text-center"><strong class="text-info">{{ error_file_name_message }}</strong></div>
+        {% endif %}
+        {% if error_file_size_message %}
+            <div class="text-center"><strong class="text-info">{{ error_file_size_message }}</strong></div>
+        {% endif %}
+        {% if success_upload_message %}
+            <div class="text-center"><strong class="text-info">{{ success_upload_message }}</strong></div>
+        {% endif %}
+        {% if over_files_size_message %}
+            <div class="text-center"><strong class="text-info">{{ over_files_size_message }}</strong></div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
