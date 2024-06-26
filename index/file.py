@@ -25,25 +25,27 @@ def files(request):
         not_files_message = '暂时没有文件'
         return render(request, 'index/file.html', locals())
     else:
-        files_data = []
+        not_sorted_files_data = []
         for file_name in files:
             file_info = File.objects.get(file_name=file_name)
             file_data = (file_info.id, file_name + ' -- ' + str(os.path.getsize(file_dir + '/' + file_name) // 1024) + ' KB', 
                          file_info.downloads, file_info.pub_date)
-            files_data.append(file_data)
+            not_sorted_files_data.append(file_data)
+        files_data = sorted(not_sorted_files_data, key=lambda x: x[3], reverse=True)
         return render(request, 'index/file.html', locals())
 
 
 def upload(request):
     if request.method == 'POST':
         file_data = request.FILES.get('file')
+        file_name = str(file_data.name)
         if not file_data:
             not_file_message = '尚未选择文件, 请选择文件'
             return render(request, 'index/upload.html', locals())
         error_file_name_length = False
-        if '.' in str(file_data.name) and len(str(file_data.name).rsplit('.', 1)[0]) < 2:  # 有拓展名文件名长度小于2
+        if '.' in file_name and len(file_name.rsplit('.', 1)[0]) < 2:  # 有拓展名文件名长度小于2
             error_file_name_length = True
-        if  '.' not in str(file_data.name) and len(str(file_data.name)) < 2:  # 无拓展名文件名长度小于2
+        if  '.' not in file_name and len(file_name) < 2:  # 无拓展名文件名长度小于2
             error_file_name_length = True
         if error_file_name_length:
             error_file_name_message = '文件名长度不应小于 2, 请重新选择文件'
@@ -55,14 +57,14 @@ def upload(request):
         if files_size_dict['file_size__sum'] and files_size_dict['file_size__sum'] > 300 * 1024 * 1024:  # 总文件大小超过 300M
             over_files_size_message = '文件系统内存不足, 请稍后再试或联系网站管理员'
             return render(request, 'index/upload.html', locals())
-        exist_file = File.objects.filter(file_name=file_data.name)
+        exist_file = File.objects.filter(file_name=file_name)
         if not exist_file:
             new_file = File.objects.create()
-            new_file.file_name = file_data.name
+            new_file.file_name = file_name
             new_file.file_size = file_data.size
             new_file.save()
-        handle_uploaded_file(file_data, str(file_data.name))
-        success_upload_message = '上传成功, 请继续'
+        handle_uploaded_file(file_data, file_name)
+        success_upload_message = f'{file_name} 上传成功, 请继续'
         return render(request, 'index/upload.html', locals())
     return render(request, 'index/upload.html', locals())
 

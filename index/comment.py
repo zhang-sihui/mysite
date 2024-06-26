@@ -32,7 +32,7 @@ def add_comment(request):
             comment.ip = ip
             comment.ip_attribution = get_ip_attribution(ip)
             comment.save()
-            sendTo(author)
+            # sendTo(author)
             return HttpResponseRedirect(reverse('index:comments'))
         else:
             error = comment_form.errors.as_text
