@@ -7,18 +7,18 @@
     <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8">
         <div class="card">
             <div class="card-header">
-                <h1>{{ article.title }}</h1>
+                <h2>{{ article.title }} 
+                    <a class="text-dark float-right" href="{% url 'index:articles' %}" 
+                        title="全部文章" data-toggle="tooltip" data-html="true" data-placement="top">
+                        <i class="fa fa-table-list"></i>
+                    </a>
+                </h2> 
                 <small>
                     <i class="fa-solid fa-user"></i> {{ article.author }} &ensp;
                     <a class="text-dark" href="#" data-toggle="tooltip" data-html="true" data-placement="bottom"
                         title="发布：{{ article.pub_date|date:'Y-m-d H:i:s' }} <br> 修改：{{ article.mod_date|date:'Y-m-d H:i:s' }}">
                         <span> <i class="fa fa-calendar"></i> {{ article.pub_date|date:'Y-m-d H:i' }} </span>
                     </a> &ensp;
-                    <script>
-                        $(document).ready(function () {
-                            $('[data-toggle="tooltip"]').tooltip();
-                        });
-                    </script>
                     <i class="fa fa-tag"></i>
                     <a class="text-dark font-italic"
                         href="{% url 'index:get_articles_by_label' article.category %}"> {{ article.category }}</a> &ensp;
@@ -26,7 +26,7 @@
                 </small>
             </div>
             <div class="card-body">
-                <span>{{ article.body|safe }}</span>
+                <div class="markdown-body editormd-preview-container">{{ article.body|safe }}</div>
             </div>
         </div>
     </div>

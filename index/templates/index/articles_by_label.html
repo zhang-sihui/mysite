@@ -8,6 +8,10 @@
         <div class="card">
             <div class="card-header">
                 <span>关于 <strong>{{ label }}</strong> 标签，共 <strong>{{ article_label|length }}</strong> 文章如下：</span>
+                <a class="text-dark float-right" href="{% url 'index:articles' %}" 
+                    title="全部文章" data-toggle="tooltip" data-html="true" data-placement="top">
+                    <i class="fa fa-table-list fa-2x"></i>
+                </a>
             </div>
             <div class="card-body">
                 {% if article_label %}

@@ -13,6 +13,12 @@
                     </span>
                 </div>
                 <div class="float-right">
+                    <a class="text-dark float-right ml-1 pt-1" href="{% url 'index:articles' %}" 
+                        title="全部文章" data-toggle="tooltip" data-html="true" data-placement="top">
+                        <i class="fa fa-table-list fa-2x"></i>
+                    </a>
+                </div>
+                <div class="float-right">
                     <form class="form-inline" method="get" action="{% url 'index:get_search_articles' %}">
                         {% csrf_token %}
                         <input type="search" class="form-control" name="q" placeholder="Search" required> &nbsp;

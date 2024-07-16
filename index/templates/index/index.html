@@ -7,6 +7,8 @@
     <title>Index</title>
     <link rel="shortcut icon" href="../../static/index/img/favicon.ico">
     <link rel="stylesheet" href="../../static/index/css/style.css">
+    <link rel="stylesheet" href="../../static/index/css/code.css">
+    <link rel="stylesheet" href="../../static/index/css/editormd.css">
     <link rel="stylesheet" href="../../static/index/font-awesome-6.4.2/all.min.css">
     <link rel="stylesheet" href="../../static/index/twitter-bootstrap-4.4.0/bootstrap.min.css">
     <script src="../../static/index/jquery-3.7.1/jquery.min.js"></script>
@@ -57,6 +59,32 @@
         </div>
         {% endblock %}
         {% block article %}{% endblock %}
+        <div class="back-top">
+            <span id="back-to-top" class="custom_back-to-top">
+                <a href="#" class="btn btn-primary" data-toggle="tooltip" data-html="true" data-placement="left" title="回到顶部">
+                    <i class="fa-solid fa-angles-up"></i>
+                </a>
+            </span>
+        </div>
+        <script>
+            // 回到顶部
+            document.addEventListener("DOMContentLoaded", () => {
+                const backToTop = document.querySelector("#back-to-top");
+                window.addEventListener("scroll", () => {
+                    if (window.pageYOffset > 600) {
+                        backToTop.style.display = "block";
+                        backToTop.style.opacity = "0.7";
+                    } else {
+                        backToTop.style.display = "none";
+                        backToTop.style.opacity = "0";
+                    }
+                });
+            });
+            // 元素的 title 样式
+            $(document).ready(() => {
+                $('[data-toggle="tooltip"]').tooltip();
+            });
+        </script>
     </div>
 </body>
 </html>

@@ -1,3 +1,4 @@
 django==4.2.7
 markdown==3.5.1
 django-mdeditor==0.1.20
+Pygments==2.18.0
