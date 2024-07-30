@@ -30,6 +30,10 @@ A personal website by Django.
 
 ## History
 
+v1.0.4
+
+- 新建 Author，Category，Status 表，在 admin 后台将新建文章时的这几个字段由输入改为下拉选择。
+
 v1.0.3
 
 - 文章页点击标签或年份或内容时，无法回到文章首页，添加回到全部文章按钮。

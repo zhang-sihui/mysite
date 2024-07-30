@@ -39,16 +39,16 @@
     <div class="col-sm-0 col-md-0 col-lg-4 col-xl-4">
         <div class="card">
             <div class="card-header">
-                <h5>{{ label_to_articles|length }} 个标签如下：</h5>
+                <h5>{{ category_to_article_count|length }} 个标签如下：</h5>
             </div>
             <div class="card-body">
-                {% if label_to_articles %}
-                {% for label, articles in label_to_articles.items %}
-                <a class="text-dark font-italic" href="{% url 'index:get_articles_by_label' label %}">
+                {% if category_to_article_count %}
+                {% for category, articles_count in category_to_article_count.items %}
+                <a class="text-dark font-italic" href="{% url 'index:get_articles_by_category' category %}">
                     <div class="list-group-item">
-                        {{ label }}
+                        {{ category }}
                         <div class="float-right">
-                            {{ articles|length }}
+                            {{ articles_count }}
                         </div>
                     </div>
                 </a>
@@ -59,16 +59,16 @@
         <div class="row my-1"></div>
         <div class="card">
             <div class="card-header">
-                <h5>{{ year_to_articles|length }} 个年份如下：</h5>
+                <h5>{{ year_to_article_count|length }} 个年份如下：</h5>
             </div>
             <div class="card-body">
-                {% if year_to_articles %}
-                {% for year, articles in year_to_articles.items %}
+                {% if year_to_article_count %}
+                {% for year, articles_count in year_to_article_count.items %}
                 <a class="text-dark font-italic" href="{% url 'index:get_articles_by_year' year %}">
                     <div class="list-group-item">
                         {{ year }}
                         <div class="float-right">
-                            {{ articles|length }}
+                            {{ articles_count }}
                         </div>
                     </div>
                 </a>

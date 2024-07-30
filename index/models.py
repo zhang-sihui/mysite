@@ -25,24 +25,64 @@ class Visit(models.Model):
     latest_viewing_ip = models.CharField('最新访问ip', max_length=16, default='')
 
 
+class Author(models.Model):
+    name = models.CharField('作者', max_length=16, default='', unique=True)
+    created_date = models.DateTimeField('创建日期', default=timezone.now)
+    delete = models.BooleanField('删除', default=False)
+
+    def __str__(self):
+        return self.name    
+
+
+class Category(models.Model):
+    name = models.CharField('分类', max_length=16, default='', unique=True)
+    created_date = models.DateTimeField('创建日期', default=timezone.now)
+    delete = models.BooleanField('删除', default=False)
+
+    def __str__(self):
+        return self.name
+
+
+class Status(models.Model):
+    name = models.CharField('Status', max_length=16, default='', unique=True)
+    name_cn = models.CharField('状态', max_length=16, default='', unique=True)
+    created_date = models.DateTimeField('创建日期', default=timezone.now)
+    delete = models.BooleanField('删除', default=False)
+
+    def get_chinese_name(self):
+        return self.name_cn
+
+    def __str__(self):
+        return self.name
+
+
 class Article(models.Model):
-    states = (
-        ('draft', '草稿'),
-        ('pub', '发布'),
-    )
     title = models.CharField('文章标题', max_length=200)
-    author = models.CharField('作者', max_length=16)
-    category = models.CharField('分类', max_length=10, default='其他')
+    author = models.CharField('作者', max_length=16, default='')
+    _author = models.ForeignKey(Author, on_delete=models.CASCADE, limit_choices_to={'delete': False}, null=True, verbose_name='作者')
+    category = models.CharField('分类', max_length=10, default='')
+    _category = models.ForeignKey(Category, on_delete=models.CASCADE, limit_choices_to={'delete': False},  null=True, verbose_name='分类')
     body = MDTextField('内容')
     pub_date = models.DateTimeField('发布日期', default=timezone.now)
     views = models.IntegerField('浏览量', default=0)
     mod_date = models.DateTimeField('修改时间', default=timezone.now)
-    state = models.CharField('状态', max_length=8, choices=states, default='draft')
+    status = models.CharField('状态', max_length=8, default='')
+    _status = models.ForeignKey(Status, on_delete=models.CASCADE, limit_choices_to={'delete': False}, null=True, verbose_name='状态')
     latest_viewing_date = models.DateTimeField('最新查看日期', default=timezone.now)
     latest_viewing_user = models.CharField('最新查看用户', max_length=16, default='')
 
-    def __str__(self):
-        return self.title
+    def save(self, *args, **kwargs):
+        if self._author:
+            author_object = Author.objects.get(name=self._author)
+            self.author = author_object.name
+        if self._category:
+            category_object = Category.objects.get(name=self._category)
+            self.category = category_object.name
+        if self._status:
+            status_object = Status.objects.get(name=self._status)
+            self.status = status_object.name
+        super(Article, self).save(*args, **kwargs)
+
 
 class Comment(models.Model):
     author = models.CharField('作者', max_length=16, default='')

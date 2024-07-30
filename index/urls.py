@@ -10,7 +10,7 @@ urlpatterns = [
     path('articles', article.articles, name='articles'),
     path('articles/<int:article_id>', article.article_body, name='article_body'),
     path('searchArticles', article.get_search_articles, name='get_search_articles'),
-    path('articlesByLabel/<str:label>', article.get_articles_by_label, name='get_articles_by_label'),
+    path('articlesByCategory/<str:category>', article.get_articles_by_category, name='get_articles_by_category'),
     path('articlesByYear/<str:year>', article.get_articles_by_year, name='get_articles_by_year'),
 
     path('comments', comment.comments, name='comments'),
