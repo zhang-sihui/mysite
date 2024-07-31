@@ -8,7 +8,7 @@ from .models import Article, Category
 
 
 def get_article_count_from_categorys():
-    categorys = Category.objects.filter(delete=False)
+    categorys = Category.objects.filter(delete=False).order_by('name')
     category_to_article_count = {}
     for category in categorys:
         articles_by_category = Article.objects.filter(category=category, status='pub')
@@ -23,14 +23,14 @@ def get_article_count_from_years():
     max_pub_date = Article.objects.aggregate(Max('pub_date'))['pub_date__max']
     max_pub_date_year = max_pub_date.year if max_pub_date else datetime.datetime.now().year
 
-    years_set = set()
-    for i in range(min_pub_date_year, max_pub_date_year + 1):
-        years_set.add(i)
+    years_list = []
+    for i in range(max_pub_date_year, min_pub_date_year - 1, -1):
+        years_list.append(i)
     year_to_article_count = {}
-    for year_set in years_set:
-        articles_by_year = Article.objects.filter(pub_date__year=year_set, status='pub')
+    for year in years_list:
+        articles_by_year = Article.objects.filter(pub_date__year=year, status='pub')
         if articles_by_year:
-            year_to_article_count[year_set] = len(articles_by_year)
+            year_to_article_count[year] = len(articles_by_year)
     return year_to_article_count
 
 def articles(request):

@@ -30,6 +30,11 @@ A personal website by Django.
 
 ## History
 
+v1.0.5
+
+- 将「文章」页内的「标签」按字母顺序排列，「年份」倒序排序。
+- 修复「评论」页内评论列表中评论与回复时间一样的问题。
+
 v1.0.4
 
 - 新建 Author，Category，Status 表，在 admin 后台将新建文章时的这几个字段由输入改为下拉选择。

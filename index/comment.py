@@ -1,6 +1,3 @@
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -32,7 +29,6 @@ def add_comment(request):
             comment.ip = ip
             comment.ip_attribution = get_ip_attribution(ip)
             comment.save()
-            # sendTo(author)
             return HttpResponseRedirect(reverse('index:comments'))
         else:
             error = comment_form.errors.as_text
@@ -43,7 +39,7 @@ def add_comment(request):
     return render(request, 'index/comments.html', locals())
 
 def get_comments():
-    comment_data = Comment.objects.filter(delete=False)
+    comment_data = Comment.objects.filter(delete=False).order_by('-sub_date')
     comments = []
     for item in comment_data:
         if item.parent_id == 0:
@@ -62,26 +58,3 @@ def get_user_data(request):
 def set_user_data(request, author, email):
     request.session['author'] = author
     request.session['email'] = email
-
-def sendTo(commentator):
-    try:
-        server_sender = "Pythonanywhere Admin<zhang.sihui@qq.com>"
-        admin_receiver = "zhang_sihui@qq.com"
-        subject = "Pythonanywhere Notice"
-        body = f"{commentator} left you a message."
-
-        msg = MIMEMultipart()  
-        msg['Subject'] = subject
-        msg['From'] = server_sender
-        msg['To'] = admin_receiver
-        msg.attach(MIMEText(body, 'plain'))  
-        
-        server_email = "zhang.sihui@qq.com"
-        authorization_code = "umciyczdmlorjecg"
-        server = smtplib.SMTP('smtp.qq.com')
-        server.starttls()
-        server.login(server_email, authorization_code)
-        server.sendmail(server_sender, admin_receiver, msg.as_string())
-        server.quit()
-    except Exception as e:
-        pass
