@@ -7,7 +7,7 @@
     <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
         <div class="card">
             <div class="card-header">
-                <span><i class="fa-regular fa-comments"></i> {{ comments|length }} 条留言</span>
+                <span><i class="fa-regular fa-comments"></i> {{ comments|length }} {{ 'messages'|translate_str }}</span>
             </div>
             <div class="card-body">
                 {% if comments %}
@@ -54,15 +54,17 @@
             {% csrf_token %}
             <div class="card">
                 <div class="card-header">
-                    <span><i class="fa-regular fa-comment-dots"></i> 留言</span>
+                    <span><i class="fa-regular fa-comment-dots"></i> {{ 'Leave a message'|translate_str }}</span>
                 </div>
                 <div class="card-body">
                     <div>
-                        <i class="fa-regular fa-user"></i> {{ comment_form.author.label_tag }} <span>名字将被临时保存</span>
+                        <i class="fa-regular fa-user"></i> {{ comment_form.author.label_tag }} 
+                        <span> {{ 'The name will be temporarily saved'|translate_str }} </span>
                         {{ comment_form.author }}
                     </div>
                     <div class="pt-2">
-                        <i class="fa-regular fa-envelope"></i> {{ comment_form.email.label_tag }} <span>邮箱将被临时保存</span>
+                        <i class="fa-regular fa-envelope"></i> {{ comment_form.email.label_tag }} 
+                        <span> {{ 'The email will be temporarily saved'|translate_str }} </span>
                         {{ comment_form.email }}
                     </div>
                     <div class="pt-2">
@@ -76,7 +78,9 @@
                     {% endif %}
                 </div>
                 <div class="card-footer">
-                    <button class="btn btn-light border border-secondary" type="submit"><i class="fa-solid fa-check"></i> 提交</button>
+                    <button class="btn btn-light border border-secondary" type="submit">
+                        <i class="fa-solid fa-check"></i> {{ 'Submit'|translate_str }}
+                    </button>
                 </div>
             </div>
         </form>

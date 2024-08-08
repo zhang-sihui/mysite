@@ -9,14 +9,14 @@
             <div class="card-header">
                 <h2>{{ article.title }} 
                     <a class="text-dark float-right" href="{% url 'index:articles' %}" 
-                        title="全部文章" data-toggle="tooltip" data-html="true" data-placement="top">
+                        title="{{ 'All articles'|translate_str }}" data-toggle="tooltip" data-html="true" data-placement="top">
                         <i class="fa fa-table-list"></i>
                     </a>
                 </h2> 
                 <small>
                     <i class="fa-solid fa-user"></i> {{ article.author }} &ensp;
                     <a class="text-dark" href="#" data-toggle="tooltip" data-html="true" data-placement="bottom"
-                        title="发布：{{ article.pub_date|date:'Y-m-d H:i:s' }} <br> 修改：{{ article.mod_date|date:'Y-m-d H:i:s' }}">
+                        title="{{ 'Publish'|translate_str }}: {{ article.pub_date|date:'Y-m-d H:i:s' }} <br> {{ 'Modify'|translate_str }}: {{ article.mod_date|date:'Y-m-d H:i:s' }}">
                         <span> <i class="fa fa-calendar"></i> {{ article.pub_date|date:'Y-m-d H:i' }} </span>
                     </a> &ensp;
                     <i class="fa fa-tag"></i>
@@ -34,7 +34,7 @@
     <div class="col-sm-0 col-md-0 col-lg-4 col-xl-4">
         <div class="card">
             <div class="card-header">
-                <h5>{{ category_to_article_count|length }} 个标签如下：</h5>
+                <h5>{{ category_to_article_count|length }} {{ 'tags is as follows'|translate_str }}: </h5>
             </div>
             <div class="card-body">
                 {% if category_to_article_count %}
@@ -54,7 +54,7 @@
         <div class="row my-1"></div>
         <div class="card">
             <div class="card-header">
-                <h5>{{ year_to_article_count|length }} 个年份如下：</h5>
+                <h5>{{ year_to_article_count|length }} {{ 'years is as follows'|translate_str }}: </h5>
             </div>
             <div class="card-body">
                 {% if year_to_article_count %}

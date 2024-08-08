@@ -57,11 +57,37 @@
                 </div>
             </div>
         </div>
+        <div class="row my-1"></div>
+        <div class="col-sm-8 col-md-6 offset-sm-2 offset-md-3"><h3>{{ 'Recent trends'|translate_str }}</h3></div>
+        <div class="col-sm-8 col-md-6 offset-sm-2 offset-md-3">
+            <div class="card">
+                <div class="card-header">{{ 'Latest article'|translate_str }}</div>
+                <div class="card-body">
+                    <div>
+                        <h2><a class="text-dark font-italic font-weight-bold"
+                                href="{% url 'index:article_body' latest_article.id %}">{{ latest_article.title }}</a></h2>
+                    </div>
+                    <div class="text-muted">Posted @{{ latest_article.author }}  {{ latest_article.pub_date|date:'Y-m-d H:i' }}</div>
+                    <div class="row my-1"></div>
+                    <div>{{ latest_article.summary|safe }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="row my-2"></div>
+        <div class="col-sm-8 col-md-6 offset-sm-2 offset-md-3">
+            <div class="card">
+                <div class="card-header">{{ 'Latest comment'|translate_str }}</div>
+                <div class="card-body">
+                    <div><h2>{{ latest_comment.content|safe }}</h2></div>
+                    <div class="text-muted">Posted @{{ latest_comment.author }}  {{ latest_comment.sub_date|date:'Y-m-d H:i' }}</div>
+                </div>
+            </div>
+        </div>
         {% endblock %}
         {% block article %}{% endblock %}
         <div class="back-top">
             <span id="back-to-top" class="custom_back-to-top">
-                <a href="#" class="btn btn-primary" data-toggle="tooltip" data-html="true" data-placement="left" title="回到顶部">
+                <a href="#" class="btn btn-primary" data-toggle="tooltip" data-html="true" data-placement="left" title="{{ 'Back to top'|translate_str }}">
                     <i class="fa-solid fa-angles-up"></i>
                 </a>
             </span>

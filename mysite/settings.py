@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
+import json
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -67,6 +69,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+            ],
+            # 自定义过滤器
+            'builtins': [
+                'index.templatetags.custom_filters',
             ],
         },
     },
@@ -127,3 +133,20 @@ STATIC_ROOT = BASE_DIR / 'static'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# config data
+try:
+    with open(os.path.join(BASE_DIR, 'config.json'), 'r') as config_file:
+        CONFIG_DATA = json.load(config_file)
+except Exception as e:
+    CONFIG_DATA = {}
+
+# translations data
+try:
+    with open(os.path.join(BASE_DIR, 'translation.json'), 'r', encoding='utf8') as translation_file:
+        TRANSLATIONS_DATA = json.load(translation_file)
+except Exception as e:
+    TRANSLATIONS_DATA = {
+        "html": {},
+        "code": {}
+    }

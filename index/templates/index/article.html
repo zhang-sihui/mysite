@@ -8,13 +8,13 @@
         <div class="card">
             <div class="card-header">
                 <div class="float-left">
-                    <span>共 <strong>{{ articles|length }}</strong> 篇文章如下：</span>
+                    <span><strong>{{ articles|length }}</strong> {{ 'articles are as follows'|translate_str }}: </span>
                 </div>
                 <div class="float-right">
                     <form class="form-inline" method="get" action="{% url 'index:get_search_articles' %}">
                         {% csrf_token %}
                         <input type="search" class="form-control" name="q" placeholder="Search" required> &nbsp;
-                        <button type="submit" class="btn btn-light border">搜索</button>
+                        <button type="submit" class="btn btn-light border">{{ 'Search'|translate_str }}</button>
                     </form>
                 </div>
             </div>
@@ -42,7 +42,7 @@
     <div class="col-sm-0 col-md-0 col-lg-4 col-xl-4">
         <div class="card">
             <div class="card-header">
-                <h5>{{ category_to_article_count|length }} 个标签如下：</h5>
+                <h5>{{ category_to_article_count|length }} {{ 'tags is as follows'|translate_str }}: </h5>
             </div>
             <div class="card-body">
                 {% if category_to_article_count %}
@@ -62,7 +62,7 @@
         <div class="row my-1"></div>
         <div class="card">
             <div class="card-header">
-                <h5>{{ year_to_article_count|length }} 个年份如下：</h5>
+                <h5>{{ year_to_article_count|length }} {{ 'years is as follows'|translate_str }}: </h5>
             </div>
             <div class="card-body">
                 {% if year_to_article_count %}

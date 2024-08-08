@@ -4,8 +4,8 @@
 <nav class="navbar navbar-expand-md bg-light navbar-light">
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav">
-            <li class="nav-item"><a class="nav-link" href="{% url 'index:files' %}">下载</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'index:upload' %}">上传</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'index:files' %}">{{ 'Download'|translate_str }}</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'index:upload' %}">{{ 'Upload'|translate_str }}</a></li>
         </ul>
     </div>
 </nav>
@@ -15,7 +15,7 @@
 <div class="card">
     <div class="card-header">
         <div class="text-center h6">
-            <span><i class="fa fa-cloud-upload" aria-hidden="true"></i> 文件上传</span>
+            <span><i class="fa fa-cloud-upload" aria-hidden="true"></i> {{ 'File upload'|translate_str }}</span>
             <small><a class="text-dark" href="{% url 'index:upload' %}">
                 <i class="fa fa-refresh" aria-hidden="true"></i></a></small>
         </div>
@@ -25,10 +25,10 @@
             <form class="form-inline mx-auto" action="" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <input class="form-control border border-secondary" type="text" id="textfield" style="width:200px" disabled/>
-                <label class="btn btn-light border border-secondary" for="customFile" style="margin: 3px">选择文件</label>
+                <label class="btn btn-light border border-secondary" for="customFile" style="margin: 3px">{{ 'Select file'|translate_str }}</label>
                 <input class="form-control" type="file" name="file" id="customFile" style="display:none;"
                        onchange="document.getElementById('textfield').value=this.files[0].name"/>
-                <input class="btn btn-light border border-secondary" type="submit" value="  提交  "/>
+                <input class="btn btn-light border border-secondary" type="submit" value=" {{ 'Submit'|translate_str }} "/>
             </form>
         </div>
     </div>

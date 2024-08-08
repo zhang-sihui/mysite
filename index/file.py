@@ -10,6 +10,7 @@ from django.urls import reverse
 from django.utils.encoding import escape_uri_path
 from django.shortcuts import render
 from .models import File
+from .common import translate_message
 from . import base_dir
 
 
@@ -22,7 +23,7 @@ def files(request):
         os.makedirs(file_dir)
     files = os.listdir(file_dir)
     if not files:
-        not_files_message = '暂时没有文件'
+        not_files_message = translate_message('No files currently')
         return render(request, 'index/file.html', locals())
     else:
         not_sorted_files_data = []
@@ -38,24 +39,24 @@ def files(request):
 def upload(request):
     if request.method == 'POST':
         file_data = request.FILES.get('file')
-        file_name = str(file_data.name)
         if not file_data:
-            not_file_message = '尚未选择文件, 请选择文件'
+            not_file_message = translate_message('No file has been selected yet, please select a file')
             return render(request, 'index/upload.html', locals())
         error_file_name_length = False
+        file_name = str(file_data.name)
         if '.' in file_name and len(file_name.rsplit('.', 1)[0]) < 2:  # 有拓展名文件名长度小于2
             error_file_name_length = True
         if  '.' not in file_name and len(file_name) < 2:  # 无拓展名文件名长度小于2
             error_file_name_length = True
         if error_file_name_length:
-            error_file_name_message = '文件名长度不应小于 2, 请重新选择文件'
+            error_file_name_message = translate_message('The length of the file name should not be less than 2. Please select the file again')
             return render(request, 'index/upload.html', locals())
         if file_data.size > 5 * 1024 * 1024:
-            error_file_size_message = '文件大小应小于 5M, 请重新选择文件'
+            error_file_size_message = translate_message('The file size should be less than 5M. Please reselect the file')
             return render(request, 'index/upload.html', locals())
         files_size_dict = File.objects.aggregate(Sum('file_size'))
         if files_size_dict['file_size__sum'] and files_size_dict['file_size__sum'] > 300 * 1024 * 1024:  # 总文件大小超过 300M
-            over_files_size_message = '文件系统内存不足, 请稍后再试或联系网站管理员'
+            over_files_size_message = translate_message('The file system is running low on memory. Please try again later or contact website management')
             return render(request, 'index/upload.html', locals())
         exist_file = File.objects.filter(file_name=file_name)
         if not exist_file:
@@ -64,7 +65,7 @@ def upload(request):
             new_file.file_size = file_data.size
             new_file.save()
         handle_uploaded_file(file_data, file_name)
-        success_upload_message = f'{file_name} 上传成功, 请继续'
+        success_upload_message = f'{file_name} '+ translate_message('upload successful, please continue')
         return render(request, 'index/upload.html', locals())
     return render(request, 'index/upload.html', locals())
 

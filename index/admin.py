@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import UserIP, Visit, About, Article, Comment, File, Author, Category, Status
-
+from .common import translate_message
 
 # Register your models here.
 
@@ -106,7 +106,7 @@ class ArticlesAdmin(admin.ModelAdmin):
             return obj._status.get_chinese_name()
         return obj._status
 
-    get_status_chinese_name.short_description = '状态'
+    get_status_chinese_name.short_description = translate_message('status')
 
 
 admin.site.register(Article, ArticlesAdmin)

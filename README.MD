@@ -30,6 +30,12 @@ A personal website by Django.
 
 ## History
 
+v1.0.6: 2024/08/09
+
+- 主页中增加最新文章和最新评论。
+- 将代码中的中文集合到翻译文件 translation 中。
+- 将获取 ip 地址的接口 api_key 设置到 config 文件中。
+
 v1.0.5
 
 - 将「文章」页内的「标签」按字母顺序排列，「年份」倒序排序。

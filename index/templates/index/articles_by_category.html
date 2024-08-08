@@ -7,9 +7,12 @@
     <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8">
         <div class="card">
             <div class="card-header">
-                <span>关于 <strong>{{ category }}</strong> 标签，共 <strong>{{ articles|length }}</strong> 文章如下：</span>
+                <span>{{ 'About'|translate_str }} 
+                    <strong>{{ category }}</strong> {{ 'tag'|translate_str }}, 
+                    <strong>{{ articles|length }}</strong> {{ 'articles are as follows'|translate_str }}:
+                </span>
                 <a class="text-dark float-right" href="{% url 'index:articles' %}" 
-                    title="全部文章" data-toggle="tooltip" data-html="true" data-placement="top">
+                    title="{{ 'All articles'|translate_str }}" data-toggle="tooltip" data-html="true" data-placement="top">
                     <i class="fa fa-table-list fa-2x"></i>
                 </a>
             </div>
@@ -39,7 +42,7 @@
     <div class="col-sm-0 col-md-0 col-lg-4 col-xl-4">
         <div class="card">
             <div class="card-header">
-                <h5>{{ category_to_article_count|length }} 个标签如下：</h5>
+                <h5>{{ category_to_article_count|length }} {{ 'tags is as follows'|translate_str }}: </h5>
             </div>
             <div class="card-body">
                 {% if category_to_article_count %}
@@ -59,7 +62,7 @@
         <div class="row my-1"></div>
         <div class="card">
             <div class="card-header">
-                <h5>{{ year_to_article_count|length }} 个年份如下：</h5>
+                <h5>{{ year_to_article_count|length }} {{ 'years is as follows'|translate_str }}: </h5>
             </div>
             <div class="card-body">
                 {% if year_to_article_count %}

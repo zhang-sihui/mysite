@@ -4,7 +4,8 @@ import urllib.request
 from django.db.models import Sum
 from django.shortcuts import render
 from django.utils import timezone
-from .models import UserIP, Visit, About
+from .models import UserIP, Visit, About, Article, Comment
+from django.conf import settings
 
 # Create your views here.
 
@@ -18,6 +19,16 @@ def index(request):
     today_visits = add_one_visit(request)
     total_visits = get_total_visit()
     localtime = timezone.now()
+    latest_article = Article.objects.filter(status='pub').order_by('-pub_date').first()
+    summary_text = latest_article.body.replace('#', ' ')
+    if len(summary_text) > 100:
+        for index, value in enumerate(summary_text):
+            if index > 100 and value == '。':
+                latest_article.summary = f'{summary_text[:index]} ...'
+                break
+    else:
+        latest_article.summary = f'{summary_text} ...'
+    latest_comment = Comment.objects.filter(parent_id=0, delete=False).order_by('-sub_date').first()
     return render(request, 'index/index.html', locals())
 
 
@@ -71,7 +82,9 @@ def get_user_ip(request):
 
 
 def get_ip_attribution(ip):
-    apikey = '588481dc94e6ddc00d10947d57aa8e91'
+    apikey = settings.CONFIG_DATA.get('ip_api_key', None)
+    if not apikey:
+        return ''
     url = "http://api.tianapi.com/txapi/ipquery/index?key={}&ip={}".format(apikey, ip)
     req = urllib.request.urlopen(url)
     content = req.read().decode('utf-8')

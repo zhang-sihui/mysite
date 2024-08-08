@@ -1,43 +1,43 @@
 from django.db import models
 from django.utils import timezone
 from mdeditor.fields import MDTextField
-
+from .common import translate_message
 
 # Create your models here.
 
 class About(models.Model):
-    title = models.CharField('标题', max_length=20)
-    pub_date = models.DateTimeField('发布时间', default=timezone.now)
-    content = MDTextField('内容')
+    title = models.CharField(translate_message('title'), max_length=20)
+    pub_date = models.DateTimeField(translate_message('pub_date'), default=timezone.now)
+    content = MDTextField(translate_message('content'))
 
 
 class UserIP(models.Model):
-    user_ip = models.CharField('用户ip', max_length=20)
-    serial_number = models.CharField('访问序号', max_length=10, default=0)
-    access_time = models.DateTimeField('首次访问时间', default=timezone.now)
-    ip_attribution = models.CharField('ip地址', max_length=64, default='')
+    user_ip = models.CharField(translate_message('user_ip'), max_length=20)
+    serial_number = models.CharField(translate_message('serial_number'), max_length=10, default=0)
+    access_time = models.DateTimeField(translate_message('access_time'), default=timezone.now)
+    ip_attribution = models.CharField(translate_message('ip_attribution'), max_length=64, default='')
 
 
 class Visit(models.Model):
-    date = models.DateField('日期', default=timezone.localdate)
-    visits = models.IntegerField('访问量', default=0)
-    first_viewing_ip = models.CharField('首次访问ip', max_length=16, default='')
-    latest_viewing_ip = models.CharField('最新访问ip', max_length=16, default='')
+    date = models.DateField(translate_message('date'), default=timezone.localdate)
+    visits = models.IntegerField(translate_message('visits'), default=0)
+    first_viewing_ip = models.CharField(translate_message('first_viewing_ip'), max_length=16, default='')
+    latest_viewing_ip = models.CharField(translate_message('latest_viewing_ip'), max_length=16, default='')
 
 
 class Author(models.Model):
-    name = models.CharField('作者', max_length=16, default='', unique=True)
-    created_date = models.DateTimeField('创建日期', default=timezone.now)
-    delete = models.BooleanField('删除', default=False)
+    name = models.CharField(translate_message('author'), max_length=16, default='', unique=True)
+    created_date = models.DateTimeField(translate_message('created_date'), default=timezone.now)
+    delete = models.BooleanField(translate_message('delete'), default=False)
 
     def __str__(self):
         return self.name    
 
 
 class Category(models.Model):
-    name = models.CharField('分类', max_length=16, default='', unique=True)
-    created_date = models.DateTimeField('创建日期', default=timezone.now)
-    delete = models.BooleanField('删除', default=False)
+    name = models.CharField(translate_message('category'), max_length=16, default='', unique=True)
+    created_date = models.DateTimeField(translate_message('created_date'), default=timezone.now)
+    delete = models.BooleanField(translate_message('delete'), default=False)
 
     def __str__(self):
         return self.name
@@ -45,9 +45,9 @@ class Category(models.Model):
 
 class Status(models.Model):
     name = models.CharField('Status', max_length=16, default='', unique=True)
-    name_cn = models.CharField('状态', max_length=16, default='', unique=True)
-    created_date = models.DateTimeField('创建日期', default=timezone.now)
-    delete = models.BooleanField('删除', default=False)
+    name_cn = models.CharField(translate_message('status'), max_length=16, default='', unique=True)
+    created_date = models.DateTimeField(translate_message('created_date'), default=timezone.now)
+    delete = models.BooleanField(translate_message('delete'), default=False)
 
     def get_chinese_name(self):
         return self.name_cn
@@ -57,19 +57,19 @@ class Status(models.Model):
 
 
 class Article(models.Model):
-    title = models.CharField('文章标题', max_length=200)
-    author = models.CharField('作者', max_length=16, default='')
-    _author = models.ForeignKey(Author, on_delete=models.CASCADE, limit_choices_to={'delete': False}, null=True, verbose_name='作者')
-    category = models.CharField('分类', max_length=10, default='')
-    _category = models.ForeignKey(Category, on_delete=models.CASCADE, limit_choices_to={'delete': False},  null=True, verbose_name='分类')
-    body = MDTextField('内容')
-    pub_date = models.DateTimeField('发布日期', default=timezone.now)
-    views = models.IntegerField('浏览量', default=0)
-    mod_date = models.DateTimeField('修改时间', default=timezone.now)
-    status = models.CharField('状态', max_length=8, default='')
-    _status = models.ForeignKey(Status, on_delete=models.CASCADE, limit_choices_to={'delete': False}, null=True, verbose_name='状态')
-    latest_viewing_date = models.DateTimeField('最新查看日期', default=timezone.now)
-    latest_viewing_user = models.CharField('最新查看用户', max_length=16, default='')
+    title = models.CharField(translate_message('title'), max_length=200)
+    author = models.CharField(translate_message('author'), max_length=16, default='')
+    _author = models.ForeignKey(Author, on_delete=models.CASCADE, limit_choices_to={'delete': False}, null=True, verbose_name=translate_message('author'))
+    category = models.CharField(translate_message('category'), max_length=10, default='')
+    _category = models.ForeignKey(Category, on_delete=models.CASCADE, limit_choices_to={'delete': False},  null=True, verbose_name=translate_message('category'))
+    body = MDTextField(translate_message('content'))
+    pub_date = models.DateTimeField(translate_message('pub_date'), default=timezone.now)
+    views = models.IntegerField(translate_message('views'), default=0)
+    mod_date = models.DateTimeField(translate_message('mod_date'), default=timezone.now)
+    status = models.CharField(translate_message('status'), max_length=8, default='')
+    _status = models.ForeignKey(Status, on_delete=models.CASCADE, limit_choices_to={'delete': False}, null=True, verbose_name=translate_message('status'))
+    latest_viewing_date = models.DateTimeField(translate_message('latest_viewing_date'), default=timezone.now)
+    latest_viewing_user = models.CharField(translate_message('latest_viewing_user'), max_length=16, default='')
 
     def save(self, *args, **kwargs):
         if self._author:
@@ -85,17 +85,17 @@ class Article(models.Model):
 
 
 class Comment(models.Model):
-    author = models.CharField('作者', max_length=16, default='')
-    email = models.CharField('邮箱', max_length=64, default='', blank=True, null=True)
-    content = MDTextField('内容')
-    sub_date = models.DateTimeField('创建日期', default=timezone.now)
-    ip = models.CharField('用户IP', max_length=16, default='', blank=True, null=True)
-    ip_attribution = models.CharField('IP地址', max_length=64, default='', blank=True, null=True)
-    parent_id = models.IntegerField('连接对象', default=0)
-    delete = models.BooleanField('删除', default=False)
+    author = models.CharField(translate_message('author'), max_length=16, default='')
+    email = models.CharField(translate_message('email'), max_length=64, default='', blank=True, null=True)
+    content = MDTextField(translate_message('content'))
+    sub_date = models.DateTimeField(translate_message('sub_date'), default=timezone.now)
+    ip = models.CharField(translate_message('user_ip'), max_length=16, default='', blank=True, null=True)
+    ip_attribution = models.CharField(translate_message('ip_attribution'), max_length=64, default='', blank=True, null=True)
+    parent_id = models.IntegerField(translate_message('parent_id'), default=0)
+    delete = models.BooleanField(translate_message('delete'), default=False)
 
 class File(models.Model):
-    file_name = models.CharField('文件名', max_length=100)
-    file_size = models.IntegerField('文件大小', default=0)
-    pub_date = models.DateTimeField('上传日期', default=timezone.now)
-    downloads = models.IntegerField('下载数', default=0)
+    file_name = models.CharField(translate_message('file_name'), max_length=100)
+    file_size = models.IntegerField(translate_message('file_size'), default=0)
+    pub_date = models.DateTimeField(translate_message('pub_date'), default=timezone.now)
+    downloads = models.IntegerField(translate_message('downloads'), default=0)
