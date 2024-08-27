@@ -1,12 +1,13 @@
-.custom_avatar {
+.custom_message_avatar {
     width: 24px;
+    min-width: 24px;
     height: 24px;
     line-height: 24px;
     text-align: center;
 }
 
-.custom_comment-info {
-    font-size: 12px;
+.custom_message-info {
+    font-size: 14px;
 }
 
 .custom_back-to-top {
@@ -19,4 +20,26 @@
 
 .custom_back-to-top:hover {
     opacity: 1;
+}
+
+.custom_user_avatar {
+    position: fixed;
+    top: 20px;
+    right: 60px;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-size: 30px;
+}
+
+.custom_name_capfirst {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    font-size: 24px;
 }

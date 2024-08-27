@@ -1,0 +1,115 @@
+{% extends 'index/index.html' %}
+
+{% block nav %}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12 col-md-10 col-lg-8 col-xl-8 offset-md-1 offset-lg-2 offset-xl-2">
+        <div class="card">
+            <div class="card-header">
+                <span><i class="fa-regular fa-message"></i> {{ messages|length }} {{ 'messages'|translate_str }}</span>
+            </div>
+            <div class="card-body">
+                <div class="card-header">
+                    <form class="" id="messageForm" method="post" action="{% url 'index:add_message' %}">
+                        {% csrf_token %}
+                        <div class="pt-2">
+                            {{ message_form.content.label_tag }} {{ message_form.content }}
+                        </div>
+                    </form>
+                    {% if error_add_message %}
+                    <div class="p-3 mb-2 bg-warning text-dark my-1">
+                        {{ error_add_message }}
+                    </div>
+                    {% endif %}
+                    <div class="row my-1"></div>
+                    <div class="w-100 d-inline-block">
+                        <div class="float-left">
+                            {% if not request.session.logged %}
+                            <div class="text-dark d-inline-block">
+                                <a href="" class="font-italic font-weight-bold" id="loginDiv" data-toggle="modal" data-target="#loginModal">
+                                    {{ 'login'|translate_str }}
+                                </a>{{ 'then leave a message'|translate_str }}
+                            </div>
+                            {% include 'index/login_modal.html' %}
+                            <div class="d-inline-block"></div>
+                            <div class="text-dark d-inline-block">
+                                {{ 'no account'|translate_str }}
+                                <a href="" class="font-italic font-weight-bold" id="registerDiv"  data-toggle="modal" data-target="#registerModal">
+                                    {{ 'register'|translate_str }}
+                                </a>
+                            </div>
+                            {% include 'index/register_modal.html' %}
+                            {% endif %}
+                        </div>
+                        <div class="float-right">
+                            <button class="btn btn-light border border-secondary" id="submitMessageButton"
+                                type="button">
+                                <i class="fa-solid fa-check"></i> {{ 'Submit'|translate_str }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-3"></div>
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <div class="d-inline-flex">
+                                <div class="bg-secondary text-white rounded custom_message_avatar">
+                                    {{ message.creator|slice:'0:1'|capfirst }}
+                                </div>
+                                <div class="p-1">
+                                    <div class="text-black-50 custom_message-info">
+                                        <span class="mr-2">{{ message.creator }}</span>
+                                        <span>{{ message.created_date|date:'Y-m-d H:i' }}</span>
+                                    </div>
+                                    <div class="font-weight-bold mb-2">{{ message.content }}</div>
+                                    <div class="d-flex bd-highlight">
+                                        {% if message.reply %}
+                                        <div class="bg-secondary text-white rounded custom_message_avatar">
+                                            {{ message.reply.creator|slice:'0:1'|capfirst }}
+                                        </div>
+                                        <div class="p-1 bd-highlight">
+                                            <div class="text-black-50 custom_message-info">
+                                                <span class="mr-2">{{ message.reply.creator }}</span>
+                                                <span>{{ message.reply.created_date|date:'Y-m-d H:i' }}</span>
+                                            </div>
+                                            <div class="font-weight-bold">{{ message.reply.content }}</div>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row my-1"></div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#submitMessageButton').click(() => {
+        const login = localStorage.getItem('login');
+        const logged = "{{ request.session.logged|default:'False' }}";
+        if (logged === "True" && login === 'true') {
+            $("#messageForm").submit();
+        }
+    });
+
+    const incorrect_password = "{{ incorrect_password }}";
+    const user_not_exist = "{{ user_not_exist }}";
+    const register_success = "{{ register_success }}";
+    if (incorrect_password === "True" || user_not_exist === "True" || register_success == "True") {
+        $("#loginDiv").click();
+    }
+
+    const user_exist = "{{ user_exist }}";
+    const different_passwords = "{{ different_passwords }}";
+    if (user_exist === "True" || different_passwords === "True") {
+        $("#registerDiv").click();
+    }
+</script>
+{% endblock %}

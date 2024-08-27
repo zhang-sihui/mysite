@@ -4,7 +4,7 @@ import urllib.request
 from django.db.models import Sum
 from django.shortcuts import render
 from django.utils import timezone
-from .models import UserIP, Visit, About, Article, Comment
+from .models import UserIP, Visit, About, Article
 from django.conf import settings
 
 # Create your views here.
@@ -28,7 +28,6 @@ def index(request):
                 break
     else:
         latest_article.summary = f'{summary_text} ...'
-    latest_comment = Comment.objects.filter(parent_id=0, delete=False).order_by('-sub_date').first()
     return render(request, 'index/index.html', locals())
 
 
@@ -84,7 +83,7 @@ def get_user_ip(request):
 def get_ip_attribution(ip):
     apikey = settings.CONFIG_DATA.get('ip_api_key', None)
     if not apikey:
-        return ''
+        return ip
     url = "http://api.tianapi.com/txapi/ipquery/index?key={}&ip={}".format(apikey, ip)
     req = urllib.request.urlopen(url)
     content = req.read().decode('utf-8')
@@ -100,10 +99,10 @@ def get_ip_attribution(ip):
     return (country + ' ' + province + ' ' + city + ' ' + district + ' ' + isp)
 
 
-def about_site(request):
+def about(request):
     # 返回日期最近的一条
-    about_site = About.objects.all().order_by('-pub_date').first()
-    if about_site:
+    about = About.objects.all().order_by('-pub_date').first()
+    if about:
         extensions = ['markdown.extensions.extra', 'markdown.extensions.codehilite', 'markdown.extensions.toc']
-        about_site.content = markdown.markdown(about_site.content, extensions=extensions)
-    return render(request, 'index/about_site.html', locals())
+        about.content = markdown.markdown(about.content, extensions=extensions)
+    return render(request, 'index/about.html', locals())

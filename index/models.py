@@ -83,19 +83,23 @@ class Article(models.Model):
             self.status = status_object.name
         super(Article, self).save(*args, **kwargs)
 
-
-class Comment(models.Model):
-    author = models.CharField(translate_message('author'), max_length=16, default='')
-    email = models.CharField(translate_message('email'), max_length=64, default='', blank=True, null=True)
-    content = MDTextField(translate_message('content'))
-    sub_date = models.DateTimeField(translate_message('sub_date'), default=timezone.now)
-    ip = models.CharField(translate_message('user_ip'), max_length=16, default='', blank=True, null=True)
-    ip_attribution = models.CharField(translate_message('ip_attribution'), max_length=64, default='', blank=True, null=True)
-    parent_id = models.IntegerField(translate_message('parent_id'), default=0)
-    delete = models.BooleanField(translate_message('delete'), default=False)
-
 class File(models.Model):
     file_name = models.CharField(translate_message('file_name'), max_length=100)
     file_size = models.IntegerField(translate_message('file_size'), default=0)
     pub_date = models.DateTimeField(translate_message('pub_date'), default=timezone.now)
     downloads = models.IntegerField(translate_message('downloads'), default=0)
+
+class Message(models.Model):
+    creator = models.CharField(translate_message('creator'), max_length=16)
+    content = models.TextField(translate_message('content'), max_length=512)
+    ip_attribution = models.CharField(translate_message('ip_attribution'), max_length=64, default='', blank=True, null=True)
+    parent_id = models.IntegerField(translate_message('parent_id'), default=0)
+    created_date = models.DateTimeField(translate_message('created_date'), default=timezone.now)
+    delete = models.BooleanField(translate_message('delete'), default=False)
+
+class User(models.Model):
+    username = models.CharField(translate_message('username'), max_length=16, blank=True, unique=True)
+    password = models.CharField(translate_message('password'), max_length=16, blank=True)
+    email = models.CharField(translate_message('email'), max_length=64, default='', blank=True, null=True)
+    created_date = models.DateTimeField(translate_message('created_date'), default=timezone.now)
+    delete = models.BooleanField(translate_message('delete'), default=False)

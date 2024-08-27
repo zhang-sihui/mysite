@@ -1,0 +1,48 @@
+<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">{{ 'register'|translate_str }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="w-100">
+                    {% if not request.session.logged %}
+                        <form class="ml-5 mt-3 mr-5 mb-3 p-1" id="loginForm" method="post" action="{% url 'index:register' pathname %}">
+                            {% csrf_token %}
+                            <div>
+                                <i class="fa-regular fa-user"></i> {{ register_form.username.label_tag }} *
+                                {{ register_form.username }}
+                            </div>
+                            <div class="pt-2">
+                                <i class="fa-solid fa-unlock"></i> {{ register_form.password.label_tag }} *
+                                {{ register_form.password }}
+                            </div>
+                            <div class="pt-2">
+                                <i class="fa-solid fa-unlock"></i> {{ register_form.confirm_password.label_tag }} *
+                                {{ register_form.confirm_password }}
+                            </div>
+                            <div class="pt-2">
+                                <i class="fa-regular fa-envelope"></i> {{ register_form.email.label_tag }}
+                                {{ register_form.email }}
+                            </div>
+                            <div class="p-2">
+                                <div class="float-right">
+                                    <button class="btn btn-light border border-secondary" type="submit">
+                                        <i class="fa-regular fa-circle"></i> {{ 'register'|translate_str }}
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    {% endif %}
+                    {% if register_error_message %}
+                        <div class="ml-5 mr-5 mt-5 p-3 alert alert-warning" role="alert"> {{ register_error_message }} </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row my-1"></div>
+        </div>
+    </div>
+</div>

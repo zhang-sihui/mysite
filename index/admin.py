@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UserIP, Visit, About, Article, Comment, File, Author, Category, Status
+from .models import UserIP, Visit, About, Article, File, Author, Category, Status, Message, User
 from .common import translate_message
 
 # Register your models here.
@@ -112,25 +112,6 @@ class ArticlesAdmin(admin.ModelAdmin):
 admin.site.register(Article, ArticlesAdmin)
 
 
-class CommentAdmin(admin.ModelAdmin):
-    fieldsets = [
-        (None, {'fields': ['author']}),
-        (None, {'fields': ['email']}),
-        (None, {'fields': ['ip']}),
-        (None, {'fields': ['ip_attribution']}),
-        ('Date information', {'fields': ['sub_date'], 'classes': ['collapse']}),
-        (None, {'fields': ['content']}),
-        (None, {'fields': ['parent_id']}),
-        (None, {'fields': ['delete']}),
-    ]
-    list_display = ('id', 'author', 'email', 'ip', 'ip_attribution', 'sub_date', 'content', 'parent_id', 'delete')
-    list_filter = ['sub_date']
-    search_fields = ['author', 'content', 'email']
-
-
-admin.site.register(Comment, CommentAdmin)
-
-
 class FileAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {'fields': ['file_name']}),
@@ -144,3 +125,34 @@ class FileAdmin(admin.ModelAdmin):
 
 
 admin.site.register(File, FileAdmin)
+
+class MessageAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (None, {'fields': ['creator']}),
+        (None, {'fields': ['ip_attribution']}),
+        ('Date information', {'fields': ['created_date'], 'classes': ['collapse']}),
+        (None, {'fields': ['content']}),
+        (None, {'fields': ['parent_id']}),
+        (None, {'fields': ['delete']}),
+    ]
+    list_display = ('id', 'creator', 'ip_attribution', 'content', 'parent_id', 'created_date', 'delete')
+    list_filter = ['created_date']
+    search_fields = ['creator', 'content']
+
+
+admin.site.register(Message, MessageAdmin)
+
+class UserAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (None, {'fields': ['username']}),
+        (None, {'fields': ['password']}),
+        (None, {'fields': ['email']}),
+        (None, {'fields': ['created_date']}),
+        (None, {'fields': ['delete']}),
+    ]
+
+    list_display = ('id', 'username', 'password', 'email', 'created_date', 'delete')
+    list_filter = ['created_date']
+    search_fields = ['username']
+
+admin.site.register(User, UserAdmin)

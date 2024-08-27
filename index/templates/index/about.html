@@ -3,18 +3,18 @@
 {% block nav %}{% endblock %}
 
 {% block content %}
-    {% if about_site %}
+    {% if about %}
         <div class="col-md-8 offset-md-2">
             <div class="card bg-light text-dark">
                 <div class="card-header">
-                    <strong>{{ about_site.title }}</strong>
+                    <strong>{{ about.title }}</strong>
                 </div>
                 <div class="card-body">
                     <div class="text-dark">
-                        {{ about_site.content | safe }}
+                        {{ about.content | safe }}
                     </div>
                 </div>
-                <div class="card-footer">{{ about_site.pub_date | date:'Y-m-d H:i' }}</div>
+                <div class="card-footer">{{ about.pub_date | date:'Y-m-d H:i' }}</div>
             </div>
         </div>
     {% endif %}

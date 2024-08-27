@@ -18,10 +18,23 @@
 
 <body class="jumbotron jumbotron-fluid">
     <div class="container-fluid">
+        {% block user %}
+            {% if request.session.logged %}
+                <div class="container">
+                    <div class="float-right custom_user_avatar"><i class="fa-solid fa-person-swimming"></i></div>
+                    <div type="button" class=" btn-secondary rounded-circle float-right custom_name_capfirst" id="popOver"
+                            data-container="body" data-toggle="popover" data-placement="bottom" data-html="true"
+                            title="{{ request.session.username }}" data-content="{% url 'index:logout' '$path' %}">
+                        {{ request.session.username|slice:'0:1'|capfirst }}
+                    </div>
+                </div>
+            {% endif %}
+        {% endblock %}
+        <div class="row my-3"></div>
         {% block nav %}
         <div class="row">
             <div class="col-3 col-sm-2 col-md-2 offset-sm-2 offset-md-2 text-center">
-                <a class="text-dark" href="{% url 'index:about_site' %}" target="_blank">
+                <a class="text-dark" href="{% url 'index:about' %}" target="_blank">
                     <i class="fa-solid fa-circle-info fa-3x"></i>
                     <p>About</p>
                 </a>
@@ -33,8 +46,8 @@
                 </a>
             </div>
             <div class="col-3 col-sm-2 col-md-2 text-center">
-                <a class="text-dark" href="{% url 'index:comments' %}" target="_blank">
-                    <i class="fa-solid fa-comment-dots fa-3x"></i>
+                <a class="text-dark" href="{% url 'index:messages' %}" target="_blank">
+                    <i class="fa-solid fa-message fa-3x"></i>
                     <p>Message</p>
                 </a>
             </div>
@@ -73,18 +86,7 @@
                 </div>
             </div>
         </div>
-        <div class="row my-2"></div>
-        <div class="col-sm-8 col-md-6 offset-sm-2 offset-md-3">
-            <div class="card">
-                <div class="card-header">{{ 'Latest comment'|translate_str }}</div>
-                <div class="card-body">
-                    <div><h2>{{ latest_comment.content|safe }}</h2></div>
-                    <div class="text-muted">Posted @{{ latest_comment.author }}  {{ latest_comment.sub_date|date:'Y-m-d H:i' }}</div>
-                </div>
-            </div>
-        </div>
         {% endblock %}
-        {% block article %}{% endblock %}
         <div class="back-top">
             <span id="back-to-top" class="custom_back-to-top">
                 <a href="#" class="btn btn-primary" data-toggle="tooltip" data-html="true" data-placement="left" title="{{ 'Back to top'|translate_str }}">
@@ -108,7 +110,26 @@
             });
             // 元素的 title 样式
             $(document).ready(() => {
+                // bootsrap 弹窗
                 $('[data-toggle="tooltip"]').tooltip();
+                $('[data-toggle="popover"]').popover();
+                // 实现每个的 logout 传递到后台的参数是本页面 url
+                let pathname = window.location.pathname.slice(1, );
+                if (pathname == '') {
+                    pathname = 'index';
+                }
+                let dataContent = $('#popOver').data("content");
+                if (dataContent) {
+                    dataContent = dataContent.replace('$path', pathname);
+                    let content = "<a id='logoutDiv' class='text-dark' href=" + dataContent + ">{{ 'logout'|translate_str }}</a>";
+                    $('#popOver').data("content", content);
+                    $('#popOver').attr("data-content", content);
+                }
+                $('#popOver').click(() => {
+                    $('#logoutDiv').click(() => {
+                        localStorage.setItem('login', 'false');
+                    });
+                });
             });
         </script>
     </div>
