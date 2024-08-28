@@ -23,5 +23,5 @@ urlpatterns = [
     # 登录
     path('login/<str:pathname>', users.login, name='login'),
     path('register/<str:pathname>', users.register, name='register'),
-    path('logout/<str:pathname>', users.logout, name='logout'),
+    re_path('logout/(?P<pathname>[\\a-zA-Z0-9]*)/', users.logout, name='logout'),
 ]

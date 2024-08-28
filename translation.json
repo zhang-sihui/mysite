@@ -1,5 +1,6 @@
 {
     "html" : {
+        "no login": "请先登录",
         "no account": "无账号, 先",
         "then leave a message": "后, 再留言。",
         "confirm_password": "确认密码",

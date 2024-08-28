@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import LoginForm, RegisterForm
 from .models import User
-from .common import translate_message
 
 def login(request, pathname):
     """ 用户登录 """
@@ -30,8 +29,14 @@ def logout(request, pathname):
     """ 用户退出 """
     # pathname 代表退出的当前页面
     # flush()方法是比较安全的一种做法, 一次性将 session 中的所有内容全部清空
+    if pathname in '/searchArticles':
+        pathname = '/articles'
+    if pathname in '/add_message':
+        pathname = '/messages'
     request.session.flush()
-    return redirect(f'index:{pathname}')
+    if not pathname.startswith('/'):
+        pathname = '/' + pathname
+    return redirect(f'{pathname}')
 
 def register(request, pathname):
     """ 用户注册 """

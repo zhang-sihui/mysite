@@ -17,6 +17,7 @@
                             {{ message_form.content.label_tag }} {{ message_form.content }}
                         </div>
                     </form>
+                    <div class="p-3 mb-2 bg-warning text-dark my-1" style="display: none;" id="errorDiv"></div>
                     {% if error_add_message %}
                     <div class="p-3 mb-2 bg-warning text-dark my-1">
                         {{ error_add_message }}
@@ -96,6 +97,10 @@
         const logged = "{{ request.session.logged|default:'False' }}";
         if (logged === "True" && login === 'true') {
             $("#messageForm").submit();
+        } else {
+            $('#errorDiv').css('display', 'block');
+            const error_login = "{{ 'no login'|translate_str }}";
+            $('#errorDiv').text(error_login);
         }
     });
 

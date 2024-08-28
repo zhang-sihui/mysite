@@ -114,10 +114,7 @@
                 $('[data-toggle="tooltip"]').tooltip();
                 $('[data-toggle="popover"]').popover();
                 // 实现每个的 logout 传递到后台的参数是本页面 url
-                let pathname = window.location.pathname.slice(1, );
-                if (pathname == '') {
-                    pathname = 'index';
-                }
+                let pathname = window.location.pathname;
                 let dataContent = $('#popOver').data("content");
                 if (dataContent) {
                     dataContent = dataContent.replace('$path', pathname);
