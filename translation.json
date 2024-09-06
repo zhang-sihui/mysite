@@ -1,8 +1,14 @@
 {
     "html" : {
+        "fold": "折叠",
+        "expand": "展开",
+        "content is not null": "* 内容 * 这个字段是必填项。",
+        "reply": "回复",
+        "then leave a comment": "后, 再评论.",
+        "comment": "评论",
         "no login": "请先登录",
         "no account": "无账号, 先",
-        "then leave a message": "后, 再留言。",
+        "then leave a message": "后, 再留言.",
         "confirm_password": "确认密码",
         "register": "注册",
         "logout": "退出",
@@ -35,6 +41,11 @@
         "All articles": "全部文章"
     },
     "code": {
+        "no login data": "没有登录信息, 请检查用户是否已登录",
+        "receiver": "接收人",
+        "related_comment": "所属评论",
+        "related_article": "所属文章",
+        "valid email": "无效的邮箱地址",
         "The password is incorrect": "密码不正确",
         "User does not exist": "用户不存在",
         "Already logged in, please log out of the current account first and then log in to another account": "已登录, 请先退出当前账号, 再登录其他账号",

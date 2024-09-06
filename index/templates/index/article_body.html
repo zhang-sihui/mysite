@@ -36,17 +36,19 @@
             <div class="card-header">
                 <h5>{{ category_to_article_count|length }} {{ 'tags is as follows'|translate_str }}: </h5>
             </div>
-            <div class="card-body">
+            <div class="card-body d-flex flex-wrap">
                 {% if category_to_article_count %}
                 {% for category, articles_count in category_to_article_count.items %}
-                <a class="text-dark font-italic" href="{% url 'index:get_articles_by_category' category %}">
+                <div class="d-inline-block w-50">
                     <div class="list-group-item">
-                        {{ category }}
-                        <div class="float-right">
-                            {{ articles_count }}
+                        <div class="d-inline-block w-75 text-truncate">
+                            <a class="text-dark font-italic" href="{% url 'index:get_articles_by_category' category %}">
+                                {{ category }}
+                            </a>
                         </div>
+                        <div class="float-right">{{ articles_count }}</div>
                     </div>
-                </a>
+                </div>
                 {% endfor %}
                 {% endif %}
             </div>
@@ -56,21 +58,257 @@
             <div class="card-header">
                 <h5>{{ year_to_article_count|length }} {{ 'years is as follows'|translate_str }}: </h5>
             </div>
-            <div class="card-body">
+            <div class="card-body d-flex flex-wrap">
                 {% if year_to_article_count %}
                 {% for year, articles_count in year_to_article_count.items %}
-                <a class="text-dark font-italic" href="{% url 'index:get_articles_by_year' year %}">
-                    <div class="list-group-item">
-                        {{ year }}
+                <div class="d-inline-block w-50">
+                    <a class="text-dark font-italic" href="{% url 'index:get_articles_by_year' year %}">
+                        <div class="list-group-item">
+                            {{ year }}
+                            <div class="float-right">
+                                {{ articles_count }}
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="row my-1"></div>
+        <div class="card">
+            <div class="card-header"><span><i class="fa-regular fa-comment"></i> {{ 'comment'|translate_str }} {{ comments|length }}</span></div>
+            <div class="card-body">
+                <div class="card-header">
+                    <form class="" id="commentForm" method="post" action="{% url 'index:add_comment' article.id %}">
+                        {% csrf_token %}
+                        {{ comment_form.content.label_tag }} {{ comment_form.content }}
+                    </form>
+                    <div class="p-3 mb-2 bg-warning text-dark my-1 d-none" id="errorCommentDiv"></div>
+                    <div class="row my-1"></div>
+                    <div class="w-100 d-inline-block">
+                        <div class="float-left">
+                            {% if not request.session.logged %}
+                            <div class="text-dark d-inline-block">
+                                <a href="" class="font-italic font-weight-bold" id="loginDiv" data-toggle="modal" data-target="#loginModal">
+                                    {{ 'login'|translate_str }}
+                                </a>{{ 'then leave a comment'|translate_str }}
+                            </div>
+                            {% include 'index/login_modal.html' %}
+                            <div class="d-inline-block"></div>
+                            <div class="text-dark d-inline-block">
+                                {{ 'no account'|translate_str }}
+                                <a href="" class="font-italic font-weight-bold" id="registerDiv"  data-toggle="modal" data-target="#registerModal">
+                                    {{ 'register'|translate_str }}
+                                </a>
+                            </div>
+                            {% include 'index/register_modal.html' %}
+                            {% endif %}
+                        </div>
                         <div class="float-right">
-                            {{ articles_count }}
+                            <button class="btn btn-light border border-secondary btn-sm" id="submitCommentButton" type="button">
+                                <i class="fa-solid fa-check"></i> {{ 'Submit'|translate_str }}
+                            </button>
                         </div>
                     </div>
-                </a>
-                {% endfor %}
+                </div>
+                <div class="row my-2"></div>
+                {% if comments %}
+                    {% for comment in comments %}
+                    <div class="list-group">
+                        <div class="list-group-item" style="padding: 0.75rem 0.75rem 0.25rem;">
+                            <div class="d-flex">
+                                <div class="bg-secondary text-white rounded custom_comment_avatar">
+                                    {{ comment.creator|slice:'0:1'|capfirst }}
+                                </div>
+                                <div class="p-1 flex-fill">
+                                    <div class="text-black-50 custom_comment-info">
+                                        <span class="mr-2">{{ comment.creator }}</span>
+                                        <span>{{ comment.created_date|date:'Y-m-d H:i' }}</span>
+                                    </div>
+                                    <div class="font-weight-bold mb-1">{{ comment.content }}</div>
+                                    <div class="tools d-inline-block w-100">
+                                        {% if comment.reply_set.all %}
+                                        <a href="#" class="text-primary" id="expandReplyButton{{comment.id}}">
+                                            {{ 'fold'|translate_str }}({{ comment.reply_set.all|length }})
+                                        </a>
+                                        {% endif %}
+                                        <button class="float-right btn btn-light btn-sm" type="button" id="replyButton{{comment.id}}">
+                                            {{ 'reply'|translate_str }}
+                                        </button>
+                                    </div>
+                                    <div class="row my-1"></div>
+                                    <div class="d-none" id="replyDiv{{comment.id}}">
+                                        <form class="" id="replyForm{{comment.id}}" method="post" action="{% url 'index:add_reply' '*path$' %}">
+                                            {% csrf_token %}
+                                            {{ comment_form.content }}
+                                        </form>
+                                        <div class="row my-1"></div>
+                                        <div class="p-3 mb-2 bg-warning text-dark my-1 d-none" id="errorReplyDiv{{comment.id}}"></div>
+                                        <div class="d-flex justify-content-end w-100">
+                                            <button class="float-left btn btn-light border border-secondary btn-sm" id="closeReplyButton{{comment.id}}" type="button">
+                                                <i class="fa-solid fa-xmark"></i>
+                                            </button>
+                                            <span class="mr-1"></span>
+                                            <button class="float-right btn btn-light border border-secondary btn-sm" id="submitReplyButton{{comment.id}}" type="button">
+                                                <i class="fa-solid fa-check"></i> {{ 'Submit'|translate_str }}
+                                            </button>
+                                        </div>
+                                        <div class="row my-1"></div>
+                                    </div>
+                                    {% if comment.reply_set.all %}
+                                    <div class="card pl-2 pt-1 pr-2" id="allReplyDiv{{comment.id}}">
+                                        {% for reply in comment.reply_set.all %}
+                                        <div class="d-flex">
+                                            <div class="bg-secondary text-white rounded custom_reply_avatar">
+                                                {{ reply.creator|slice:'0:1'|capfirst }}
+                                            </div>
+                                            <div class="pl-1 bd-highlight flex-fill">
+                                                <div class="text-black-50 custom_reply-info">
+                                                    <span class="mr-2">{{ reply.creator }} @{{ reply.receiver }}</span>
+                                                    <span>{{ reply.created_date|date:'Y-m-d H:i' }}</span>
+                                                </div>
+                                                <div class="font-weight-bold">{{ reply.content }}</div>
+                                                <div class="tools d-inline-block w-100">
+                                                    <button class="float-right btn btn-link btn-sm" type="button" commentId="{{comment.id}}" id="interReplyButton_{{reply.id}}">
+                                                        {{ 'reply'|translate_str }}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr style="margin-top: 5px; margin-bottom: 5px;">
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row my-1"></div>
+                    {% endfor %}
                 {% endif %}
             </div>
         </div>
     </div>
 </div>
+<script>
+    // 点击评论按钮事件
+    $('#submitCommentButton').click(() => {
+        const login = localStorage.getItem('login');
+        const logged = "{{ request.session.logged|default:'False' }}";
+        if (logged === "True" && login === 'true') {
+            const textareaValue = $('#commentForm textarea').val();
+            if (textareaValue != '') {
+                $("#commentForm").submit();
+            } else {
+                $('#errorCommentDiv').removeClass('d-none');
+                const error_content = "{{ 'content is not null'|translate_str }}";
+                $('#errorCommentDiv').text(error_content);
+            }
+        } else {
+            $('#errorCommentDiv').removeClass('d-none');
+            const error_login = "{{ 'no login'|translate_str }}";
+            $('#errorCommentDiv').text(error_login);
+        }
+    });
+
+    // 登录与注册时的报错信息
+    const incorrect_password = "{{ incorrect_password }}";
+    const user_not_exist = "{{ user_not_exist }}";
+    const register_success = "{{ register_success }}";
+    if (incorrect_password === "True" || user_not_exist === "True" || register_success == "True") {
+        $("#loginDiv").click();
+    }
+    const user_exist = "{{ user_exist }}";
+    const different_passwords = "{{ different_passwords }}";
+    const invalid_email = "{{ invalid_email }}";
+    if (user_exist === "True" || different_passwords === "True" || invalid_email === "True") {
+        $("#registerDiv").click();
+    }
+
+    const comment_ids = JSON.parse('{{ comments_id }}');
+    for (const comment_id of comment_ids) {
+        // 点击回复按钮显示和隐藏回复输入框
+        $('#replyButton' + comment_id).click(() => {
+            const action_value = $("#replyForm" + comment_id).attr('action');
+            const new_action_value = relace_str(action_value, comment_id + '&comment');
+            $("#replyForm" + comment_id).attr('action', new_action_value);
+            if ($('#replyDiv' + comment_id).hasClass('d-none')) {
+                $('#replyDiv' + comment_id).removeClass('d-none');
+            } else {
+                // $('#replyDiv' + comment_id).addClass('d-none');
+                $('#errorReplyDiv' + comment_id).addClass('d-none');
+            }
+        });
+
+        // 点击回复提交按钮事件
+        $('#submitReplyButton' + comment_id).click(() => {
+            const login = localStorage.getItem('login');
+            const logged = "{{ request.session.logged|default:'False' }}";
+            if (logged === "True" && login === 'true') {
+                const textareaValue = $('#replyForm' + comment_id + ' textarea').val();
+                if (textareaValue != '') {
+                    $("#replyForm" + comment_id).submit();
+                } else {
+                    $('#errorReplyDiv' + comment_id).removeClass('d-none');
+                    const error_content = "{{ 'content is not null'|translate_str }}";
+                    $('#errorReplyDiv' + comment_id).text(error_content);
+                }
+            } else {
+                $('#errorReplyDiv' + comment_id).removeClass('d-none');
+                const error_login = "{{ 'no login'|translate_str }}";
+                $('#errorReplyDiv' + comment_id).text(error_login);
+            }
+        });
+
+        $('#closeReplyButton' + comment_id).click(() => {
+            $('#replyDiv' + comment_id).addClass('d-none');
+        });
+
+        // 回复的展开与折叠
+        $('#expandReplyButton' + comment_id).click((event) => {
+            event.preventDefault();  // 页面不滚动到顶部
+            const text_value = $('#expandReplyButton' + comment_id).text();
+            if ($('#allReplyDiv' + comment_id).hasClass('d-none')) {
+                $('#allReplyDiv' + comment_id).removeClass('d-none');
+                const new_text_value = replace_text(text_value, "{{ 'fold'|translate_str }}");
+                $('#expandReplyButton' + comment_id).text(new_text_value);
+            } else {
+                $('#allReplyDiv' + comment_id).addClass('d-none');
+                const new_text_value = replace_text(text_value, "{{ 'expand'|translate_str }}");
+                $('#expandReplyButton' + comment_id).text(new_text_value);
+            }
+        });
+    }
+
+    // 点击回复的回复的按钮事件
+    $('[id^="interReplyButton_"]').each(function() {
+        $('#' + $(this).attr('id')).click(() => {
+            const reply_id = $(this).attr('id').split('_')[1];
+            const comment_id = $(this).attr('commentId');
+            const action_value = $("#replyForm" + comment_id).attr('action');
+            const new_action_value = relace_str(action_value, reply_id + '&reply');
+            $("#replyForm" + comment_id).attr('action', new_action_value);
+            if ($('#replyDiv' + comment_id).hasClass('d-none')) {
+                $('#replyDiv' + comment_id).removeClass('d-none');
+            } else {
+                // $('#replyDiv' + comment_id).addClass('d-none');
+                $('#errorReplyDiv' + comment_id).addClass('d-none');
+            }
+        });
+    });
+
+    function relace_str(str, value) {
+        let start = str.indexOf('*');
+        let end = str.indexOf('$');
+        let newStr = str.slice(0, start + 1) + value + str.slice(end);
+        return newStr;
+    }
+
+    function replace_text(str, value) {
+        let start = str.indexOf('(');
+        let newStr = value + str.slice(start, );
+        return newStr;
+    }
+</script>
 {% endblock %}

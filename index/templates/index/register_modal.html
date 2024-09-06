@@ -10,7 +10,7 @@
             <div class="modal-body">
                 <div class="w-100">
                     {% if not request.session.logged %}
-                        <form class="ml-5 mt-3 mr-5 mb-3 p-1" id="loginForm" method="post" action="{% url 'index:register' pathname %}">
+                        <form class="ml-5 mt-3 mr-5 mb-3 p-1" method="post" action="{% url 'index:register' pathname %}">
                             {% csrf_token %}
                             <div>
                                 <i class="fa-regular fa-user"></i> {{ register_form.username.label_tag }} *
@@ -37,8 +37,8 @@
                             </div>
                         </form>
                     {% endif %}
-                    {% if register_error_message %}
-                        <div class="ml-5 mr-5 mt-5 p-3 alert alert-warning" role="alert"> {{ register_error_message }} </div>
+                    {% if register_error_msg %}
+                        <div class="ml-5 mr-5 mt-5 p-3 alert alert-warning" role="alert"> {{ register_error_msg }} </div>
                     {% endif %}
                 </div>
             </div>

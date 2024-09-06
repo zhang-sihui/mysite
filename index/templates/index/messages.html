@@ -13,14 +13,12 @@
                 <div class="card-header">
                     <form class="" id="messageForm" method="post" action="{% url 'index:add_message' %}">
                         {% csrf_token %}
-                        <div class="pt-2">
-                            {{ message_form.content.label_tag }} {{ message_form.content }}
-                        </div>
+                        {{ message_form.content.label_tag }} {{ message_form.content }}
                     </form>
                     <div class="p-3 mb-2 bg-warning text-dark my-1" style="display: none;" id="errorDiv"></div>
-                    {% if error_add_message %}
+                    {% if error_add_msg %}
                     <div class="p-3 mb-2 bg-warning text-dark my-1">
-                        {{ error_add_message }}
+                        {{ error_add_msg }}
                     </div>
                     {% endif %}
                     <div class="row my-1"></div>
@@ -44,8 +42,7 @@
                             {% endif %}
                         </div>
                         <div class="float-right">
-                            <button class="btn btn-light border border-secondary" id="submitMessageButton"
-                                type="button">
+                            <button class="btn btn-light border border-secondary" id="submitMessageButton" type="button">
                                 <i class="fa-solid fa-check"></i> {{ 'Submit'|translate_str }}
                             </button>
                         </div>
@@ -113,7 +110,8 @@
 
     const user_exist = "{{ user_exist }}";
     const different_passwords = "{{ different_passwords }}";
-    if (user_exist === "True" || different_passwords === "True") {
+    const invalid_email = "{{ invalid_email }}";
+    if (user_exist === "True" || different_passwords === "True" || invalid_email === "True") {
         $("#registerDiv").click();
     }
 </script>

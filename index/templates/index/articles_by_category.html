@@ -44,17 +44,19 @@
             <div class="card-header">
                 <h5>{{ category_to_article_count|length }} {{ 'tags is as follows'|translate_str }}: </h5>
             </div>
-            <div class="card-body">
+            <div class="card-body d-flex flex-wrap">
                 {% if category_to_article_count %}
                 {% for category, articles_count in category_to_article_count.items %}
-                    <a class="text-dark font-italic" href="{% url 'index:get_articles_by_category' category %}">
-                        <div class="list-group-item">
-                            {{ category }}
-                            <div class="float-right">
-                                {{ articles_count }}
-                            </div>
+                <div class="d-inline-block w-50">
+                    <div class="list-group-item">
+                        <div class="d-inline-block w-75 text-truncate">
+                            <a class="text-dark font-italic" href="{% url 'index:get_articles_by_category' category %}">
+                                {{ category }}
+                            </a>
                         </div>
-                    </a>
+                        <div class="float-right">{{ articles_count }}</div>
+                    </div>
+                </div>
                 {% endfor %}
                 {% endif %}
             </div>
@@ -64,17 +66,19 @@
             <div class="card-header">
                 <h5>{{ year_to_article_count|length }} {{ 'years is as follows'|translate_str }}: </h5>
             </div>
-            <div class="card-body">
+            <div class="card-body d-flex flex-wrap">
                 {% if year_to_article_count %}
                 {% for year, articles_count in year_to_article_count.items %}
-                <a class="text-dark font-italic" href="{% url 'index:get_articles_by_year' year %}">
-                    <div class="list-group-item">
-                        {{ year }}
-                        <div class="float-right">
-                            {{ articles_count }}
+                <div class="d-inline-block w-50">
+                    <a class="text-dark font-italic" href="{% url 'index:get_articles_by_year' year %}">
+                        <div class="list-group-item">
+                            {{ year }}
+                            <div class="float-right">
+                                {{ articles_count }}
+                            </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
+                </div>
                 {% endfor %}
                 {% endif %}
             </div>

@@ -1,12 +1,26 @@
-.custom_message_avatar {
+.custom_message_avatar, .custom_comment_avatar {
     width: 24px;
     min-width: 24px;
     height: 24px;
     line-height: 24px;
     text-align: center;
+    font-size: 18px;
 }
 
-.custom_message-info {
+.custom_reply_avatar {
+    width: 20px;
+    min-width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.custom_message-info, .custom_comment-info {
+    font-size: 16px;
+}
+
+.custom_reply-info {
     font-size: 14px;
 }
 

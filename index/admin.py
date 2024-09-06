@@ -1,10 +1,10 @@
 from django.contrib import admin
-from .models import UserIP, Visit, About, Article, File, Author, Category, Status, Message, User
+from .models import IP, Visit, About, Article, File, Author, Category, Status, Message, User, Comment, Reply
 from .common import translate_message
 
 # Register your models here.
 
-class UserIPAdmin(admin.ModelAdmin):
+class IPAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {'fields': ['user_ip']}),
         (None, {'fields': ['access_time']}),
@@ -16,7 +16,7 @@ class UserIPAdmin(admin.ModelAdmin):
     search_fields = ['user_ip', 'ip_attribution']
 
 
-admin.site.register(UserIP, UserIPAdmin)
+admin.site.register(IP, IPAdmin)
 
 
 class VisitAdmin(admin.ModelAdmin):
@@ -156,3 +156,36 @@ class UserAdmin(admin.ModelAdmin):
     search_fields = ['username']
 
 admin.site.register(User, UserAdmin)
+
+class CommentAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (None, {'fields': ['creator']}),
+        (None, {'fields': ['content']}),
+        (None, {'fields': ['ip_attribution']}),
+        (None, {'fields': ['article_id']}),
+        (None, {'fields': ['created_date']}),
+        (None, {'fields': ['delete']}),
+    ]
+
+    list_display = ('id', 'creator', 'content', 'ip_attribution', 'article_id', 'created_date', 'delete')
+    list_filter = ['created_date']
+    search_fields = ['content']
+
+admin.site.register(Comment, CommentAdmin)
+
+class ReplyAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (None, {'fields': ['creator']}),
+        (None, {'fields': ['content']}),
+        (None, {'fields': ['receiver']}),
+        (None, {'fields': ['comment']}),
+        (None, {'fields': ['ip_attribution']}),
+        (None, {'fields': ['created_date']}),
+        (None, {'fields': ['delete']}),
+    ]
+
+    list_display = ('id', 'creator', 'content', 'receiver', 'comment', 'ip_attribution', 'created_date', 'delete')
+    list_filter = ['created_date']
+    search_fields = ['content']
+
+admin.site.register(Reply, ReplyAdmin)

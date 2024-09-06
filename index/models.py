@@ -11,7 +11,7 @@ class About(models.Model):
     content = MDTextField(translate_message('content'))
 
 
-class UserIP(models.Model):
+class IP(models.Model):
     user_ip = models.CharField(translate_message('user_ip'), max_length=20)
     serial_number = models.CharField(translate_message('serial_number'), max_length=10, default=0)
     access_time = models.DateTimeField(translate_message('access_time'), default=timezone.now)
@@ -101,5 +101,22 @@ class User(models.Model):
     username = models.CharField(translate_message('username'), max_length=16, blank=True, unique=True)
     password = models.CharField(translate_message('password'), max_length=16, blank=True)
     email = models.CharField(translate_message('email'), max_length=64, default='', blank=True, null=True)
+    created_date = models.DateTimeField(translate_message('created_date'), default=timezone.now)
+    delete = models.BooleanField(translate_message('delete'), default=False)
+
+class Comment(models.Model):
+    creator = models.CharField(translate_message('creator'), max_length=16)
+    content = models.TextField(translate_message('content'), max_length=512)
+    ip_attribution = models.CharField(translate_message('ip_attribution'), max_length=64, default='', blank=True, null=True)
+    article_id = models.IntegerField(translate_message('related_article'), default=1)
+    created_date = models.DateTimeField(translate_message('created_date'), default=timezone.now)
+    delete = models.BooleanField(translate_message('delete'), default=False)
+
+class Reply(models.Model):
+    creator = models.CharField(translate_message('creator'), max_length=16)
+    content = models.TextField(translate_message('content'), max_length=512)
+    receiver = models.CharField(translate_message('receiver'), max_length=16)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, limit_choices_to={'delete': False}, null=True, verbose_name=translate_message('related_comment'))
+    ip_attribution = models.CharField(translate_message('ip_attribution'), max_length=64, default='', blank=True, null=True)
     created_date = models.DateTimeField(translate_message('created_date'), default=timezone.now)
     delete = models.BooleanField(translate_message('delete'), default=False)

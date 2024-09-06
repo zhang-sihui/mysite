@@ -4,7 +4,7 @@ import urllib.request
 from django.db.models import Sum
 from django.shortcuts import render
 from django.utils import timezone
-from .models import UserIP, Visit, About, Article
+from .models import IP, Visit, About, Article
 from django.conf import settings
 
 # Create your views here.
@@ -55,16 +55,16 @@ def get_total_visit():
     return visits
 
 def check_ip(user_ip):
-    ip_data = UserIP.objects.filter(user_ip=user_ip)
+    ip_data = IP.objects.filter(user_ip=user_ip)
     if ip_data:
         return True
     return False
 
 
 def add_ip(user_ip):
-    ips = UserIP.objects.all()
+    ips = IP.objects.all()
     ip_attribution = get_ip_attribution(user_ip)
-    new_ip = UserIP.objects.create()
+    new_ip = IP.objects.create()
     new_ip.user_ip = user_ip
     new_ip.serial_number = len(ips) + 1
     new_ip.ip_attribution = ip_attribution

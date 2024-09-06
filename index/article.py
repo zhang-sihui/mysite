@@ -1,10 +1,13 @@
+import json
 import datetime
 import markdown
 from django.db.models import Min, Max
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from .views import get_user_ip
-from .models import Article, Category
+from .models import Article, Category, Comment
+from .forms import CommentForm, initial_register_form, initial_login_form
+from .common import translate_message
 
 
 def get_article_count_from_categorys():
@@ -50,6 +53,39 @@ def article_body(request, article_id):
     article.body = markdown.markdown(article.body, extensions=extensions)
     category_to_article_count = get_article_count_from_categorys()
     year_to_article_count = get_article_count_from_years()
+    comments = Comment.objects.filter(delete=False, article_id=article_id).prefetch_related('reply_set').order_by('-created_date')
+    comment_ids = []
+    for comment in comments:
+        comment_ids.append(comment.id)
+    comments_id = json.dumps(comment_ids)
+    login_form = initial_login_form(request)
+    register_form = initial_register_form(request)
+    comment_form = CommentForm()
+    pathname = f'articles/{article_id}'
+    # 密码不正确
+    incorrect_password = request.session.pop('incorrect_password', False)
+    if incorrect_password:
+        login_error_msg = translate_message('The password is incorrect')
+    # 用户不存在
+    user_not_exist = request.session.pop('user_not_exist', False)
+    if user_not_exist:
+        login_error_msg = translate_message('User does not exist')
+    # 注册成功
+    register_success = request.session.pop('register_success', False)
+    if register_success:
+        login_info_msg = translate_message('register success')
+    # 注册时用户存在
+    user_exist = request.session.pop('user_exist', False)
+    if user_exist:
+        register_error_msg = translate_message('The user already exists, please modify the username')
+    # 注册时不同的密码
+    different_passwords = request.session.pop('different_passwords', False)
+    if different_passwords:
+        register_error_msg = translate_message('The passwords entered twice are different')
+    # 注册时邮箱不正确
+    invalid_email = request.session.pop('invalid_email', False)
+    if invalid_email:
+        register_error_msg = translate_message('valid email')
     return render(request, 'index/article_body.html', locals())
 
 
