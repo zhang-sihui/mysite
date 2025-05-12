@@ -17,6 +17,9 @@ A personal website by Django.
 - 创建超级用户：
   - 在项目路径下：输入 `python manage.py createsuperuser`，进入超级用户（即管理员）创建终端。
   - 依次提示输入用户名，邮箱（可为空），密码，验证密码，即可成功创建。
+- admin 后台的 markdown 输入和前端页面中显示代码语法高亮：
+  - 安装 `pip install Pygments`，执行 `pygmentize -S default -f html -a .codehilite > code.css`，`pygmentize -S default -f html -a .codehilite > editormd.css`
+  - 将生成的文件并添加到 head 标签中
 
 ## Runserver
 
@@ -29,6 +32,11 @@ A personal website by Django.
 - Admin UI(管理)：<http://127.0.0.1:8000/admin>
 
 ## History
+
+v1.0.10: 2025/5/12
+
+- 添加 markdown 页面代码语法高亮的说明。
+- 获取指定文章中的所有评论下的回复。
 
 v1.0.9: 2024/09/05
 

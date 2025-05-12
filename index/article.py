@@ -1,11 +1,11 @@
 import json
 import datetime
 import markdown
-from django.db.models import Min, Max
+from django.db.models import Min, Max, Prefetch
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from .views import get_user_ip
-from .models import Article, Category, Comment
+from .models import Article, Category, Comment, Reply
 from .forms import CommentForm, initial_register_form, initial_login_form
 from .common import translate_message
 
@@ -53,7 +53,10 @@ def article_body(request, article_id):
     article.body = markdown.markdown(article.body, extensions=extensions)
     category_to_article_count = get_article_count_from_categorys()
     year_to_article_count = get_article_count_from_years()
-    comments = Comment.objects.filter(delete=False, article_id=article_id).prefetch_related('reply_set').order_by('-created_date')
+    # 获取指定文章下的所有评论及其回复
+    comments = Comment.objects.filter(delete=False, article_id=article_id).prefetch_related(
+            Prefetch('reply_set', queryset=Reply.objects.filter(delete=False))
+        ).order_by('-created_date')
     comment_ids = []
     for comment in comments:
         comment_ids.append(comment.id)
