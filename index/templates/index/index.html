@@ -24,7 +24,8 @@
                     <div class="float-right custom_user_avatar"><i class="fa-solid fa-person-swimming"></i></div>
                     <div type="button" class=" btn-secondary rounded-circle float-right custom_name_capfirst" id="popOver"
                             data-container="body" data-toggle="popover" data-placement="bottom" data-html="true"
-                            title="{{ request.session.username }}" data-content="{% url 'index:logout' '$path' %}">
+                            title="{{ request.session.username }}({{ request.session.email }})"
+                            data-content="{% url 'index:logout' '$path' %}">
                         {{ request.session.username|slice:'0:1'|capfirst }}
                     </div>
                 </div>
@@ -76,6 +77,7 @@
             <div class="card">
                 <div class="card-header">{{ 'Latest article'|translate_str }}</div>
                 <div class="card-body">
+                    {% if latest_article %}
                     <div>
                         <h2><a class="text-dark font-italic font-weight-bold"
                                 href="{% url 'index:article_body' latest_article.id %}">{{ latest_article.title }}</a></h2>
@@ -83,6 +85,7 @@
                     <div class="text-muted">Posted @{{ latest_article.author }}  {{ latest_article.pub_date|date:'Y-m-d H:i' }}</div>
                     <div class="row my-1"></div>
                     <div>{{ latest_article.summary|safe }}</div>
+                    {% endif %}
                 </div>
             </div>
         </div>

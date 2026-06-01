@@ -13,7 +13,7 @@ A personal website by Django.
 - 安装模块：
   - 按照 requirements.txt 文件安装需要的模块，可以单个 `pip install xxx`；也可以一次全部安装，不过需要在项目文件夹路径下执行 `pip install -r requirements.txt`。
 - 初始化数据库：
-  - 在项目路径下，执行两条命令即可初始化数据库：`python manage.py makemigrations`，`python manage.py migrate`。
+  - 在项目路径下，执行两条命令即可初始化数据库：`python manage.py makemigrations index`，`python manage.py migrate`。
 - 创建超级用户：
   - 在项目路径下：输入 `python manage.py createsuperuser`，进入超级用户（即管理员）创建终端。
   - 依次提示输入用户名，邮箱（可为空），密码，验证密码，即可成功创建。
@@ -32,6 +32,14 @@ A personal website by Django.
 - Admin UI(管理)：<http://127.0.0.1:8000/admin>
 
 ## History
+
+v1.0.11: 2026/06/02
+
+- 修复拉取新代码时，执行 `python manage.py makemigrations` 没有正常迁移的问题。
+- 修复拉取新代码时，没有文章，进入 index.html 主页报错的问题。
+- 修复注册新用户时，填写了 email，报错时，没有正常回显。
+- 登录成功时 session 中增加 email 数据，并显示在登录头像点击显示的用户名后。
+- 设置中增加 session cookie 的过期时间。
 
 v1.0.10: 2025/5/12
 

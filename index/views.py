@@ -20,14 +20,15 @@ def index(request):
     total_visits = get_total_visit()
     localtime = timezone.now()
     latest_article = Article.objects.filter(status='pub').order_by('-pub_date').first()
-    summary_text = latest_article.body.replace('#', ' ')
-    if len(summary_text) > 100:
-        for index, value in enumerate(summary_text):
-            if index > 100 and value == '。':
-                latest_article.summary = f'{summary_text[:index]} ...'
-                break
-    else:
-        latest_article.summary = f'{summary_text} ...'
+    if latest_article:
+        summary_text = latest_article.body.replace('#', ' ')
+        if len(summary_text) > 100:
+            for index, value in enumerate(summary_text):
+                if index > 100 and value == '。':
+                    latest_article.summary = f'{summary_text[:index]} ...'
+                    break
+        else:
+            latest_article.summary = f'{summary_text} ...'
     return render(request, 'index/index.html', locals())
 
 

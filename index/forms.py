@@ -32,14 +32,14 @@ class ReplyForm(forms.Form):
 
 def initial_register_form(request):
     register_username = request.session.get('register_username', '')
-    register_eamil = request.session.get('register_eamil', '')
+    register_email = request.session.get('register_email', '')
     initial_register_data = {}
     if register_username:
         initial_register_data['username'] = register_username
-    if register_eamil:
-        initial_register_data['eamil'] = register_eamil
+    if register_email:
+        initial_register_data['email'] = register_email
     register_form = RegisterForm()
-    if register_username or register_eamil:
+    if register_username or register_email:
         register_form = RegisterForm(initial=initial_register_data)
     return register_form
 
