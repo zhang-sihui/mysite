@@ -1,8 +1,8 @@
 from django.contrib import admin
-from .models import IP, Visit, About, Article, File, Author, Category, Status, Message, User, Comment, Reply
-from .common import translate_message
+from .models import IP, Visit, About, Article, File, Author, Category, Message, User, Comment, Reply
 
 # Register your models here.
+
 
 class IPAdmin(admin.ModelAdmin):
     fieldsets = [
@@ -11,7 +11,8 @@ class IPAdmin(admin.ModelAdmin):
         (None, {'fields': ['serial_number']}),
         (None, {'fields': ['ip_attribution']}),
     ]
-    list_display = ('serial_number', 'user_ip', 'ip_attribution', 'access_time')
+    list_display = ('serial_number', 'user_ip',
+                    'ip_attribution', 'access_time')
     list_filter = ['access_time']
     search_fields = ['user_ip', 'ip_attribution']
 
@@ -37,12 +38,14 @@ admin.site.register(Visit, VisitAdmin)
 class AboutAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {'fields': ['title']}),
-        ('Date information', {'fields': ['pub_date'], 'classes': ['collapse']}),
+        ('Date information', {'fields': [
+         'pub_date'], 'classes': ['collapse']}),
         (None, {'fields': ['content']}),
     ]
     list_display = ('title', 'pub_date')
     search_fields = ['title', 'content']
     list_filter = ['pub_date']
+
 
 admin.site.register(About, AboutAdmin)
 
@@ -57,6 +60,7 @@ class AuthorAdmin(admin.ModelAdmin):
     search_fields = ['name', 'delete']
     list_filter = ['created_date', 'delete']
 
+
 admin.site.register(Author, AuthorAdmin)
 
 
@@ -70,21 +74,8 @@ class CategoryAdmin(admin.ModelAdmin):
     search_fields = ['name', 'delete']
     list_filter = ['created_date', 'delete']
 
+
 admin.site.register(Category, CategoryAdmin)
-
-
-class StatusAdmin(admin.ModelAdmin):
-    fieldsets = [
-        (None, {'fields': ['name']}),
-        (None, {'fields': ['name_cn']}),
-        (None, {'fields': ['created_date']}),
-        (None, {'fields': ['delete']}),
-    ]
-    list_display = ('name', 'name_cn', 'created_date', 'delete')
-    search_fields = ['name', 'name_cn', 'delete']
-    list_filter = ['created_date', 'delete']
-
-admin.site.register(Status, StatusAdmin)
 
 
 class ArticlesAdmin(admin.ModelAdmin):
@@ -92,21 +83,18 @@ class ArticlesAdmin(admin.ModelAdmin):
         (None, {'fields': ['title']}),
         (None, {'fields': ['_author']}),
         (None, {'fields': ['_category']}),
-        (None, {'fields': ['_status']}),
-        ('Date information', {'fields': ['pub_date'], 'classes': ['collapse']}),
-        ('Date information', {'fields': ['mod_date'], 'classes': ['collapse']}),
+        ('Date information', {'fields': [
+         'pub_date'], 'classes': ['collapse']}),
+        ('Date information', {'fields': [
+         'mod_date'], 'classes': ['collapse']}),
         (None, {'fields': ['body']}),
+        (None, {'fields': ['delete']}),
     ]
-    list_display = ('id', 'title', 'author', 'category', 'get_status_chinese_name', 'pub_date', 'latest_viewing_date', 'latest_viewing_user')
-    list_filter = ['pub_date']
-    search_fields = ['title', 'author', 'category', 'pub_date', 'body']
-
-    def get_status_chinese_name(self, obj):
-        if obj._status:
-            return obj._status.get_chinese_name()
-        return obj._status
-
-    get_status_chinese_name.short_description = translate_message('status')
+    list_display = ('id', 'title', 'author', 'category', 'pub_date',
+                    'latest_viewing_date', 'latest_viewing_user', 'delete')
+    list_filter = ['pub_date', 'delete']
+    search_fields = ['title', 'author',
+                     'category', 'pub_date', 'body', 'delete']
 
 
 admin.site.register(Article, ArticlesAdmin)
@@ -126,21 +114,25 @@ class FileAdmin(admin.ModelAdmin):
 
 admin.site.register(File, FileAdmin)
 
+
 class MessageAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {'fields': ['creator']}),
         (None, {'fields': ['ip_attribution']}),
-        ('Date information', {'fields': ['created_date'], 'classes': ['collapse']}),
+        ('Date information', {'fields': [
+         'created_date'], 'classes': ['collapse']}),
         (None, {'fields': ['content']}),
         (None, {'fields': ['parent_id']}),
         (None, {'fields': ['delete']}),
     ]
-    list_display = ('id', 'creator', 'ip_attribution', 'content', 'parent_id', 'created_date', 'delete')
+    list_display = ('id', 'creator', 'ip_attribution',
+                    'content', 'parent_id', 'created_date', 'delete')
     list_filter = ['created_date']
     search_fields = ['creator', 'content']
 
 
 admin.site.register(Message, MessageAdmin)
+
 
 class UserAdmin(admin.ModelAdmin):
     fieldsets = [
@@ -151,11 +143,14 @@ class UserAdmin(admin.ModelAdmin):
         (None, {'fields': ['delete']}),
     ]
 
-    list_display = ('id', 'username', 'password', 'email', 'created_date', 'delete')
+    list_display = ('id', 'username', 'password',
+                    'email', 'created_date', 'delete')
     list_filter = ['created_date']
     search_fields = ['username']
 
+
 admin.site.register(User, UserAdmin)
+
 
 class CommentAdmin(admin.ModelAdmin):
     fieldsets = [
@@ -167,11 +162,14 @@ class CommentAdmin(admin.ModelAdmin):
         (None, {'fields': ['delete']}),
     ]
 
-    list_display = ('id', 'creator', 'content', 'ip_attribution', 'article_id', 'created_date', 'delete')
+    list_display = ('id', 'creator', 'content', 'ip_attribution',
+                    'article_id', 'created_date', 'delete')
     list_filter = ['created_date']
     search_fields = ['content']
 
+
 admin.site.register(Comment, CommentAdmin)
+
 
 class ReplyAdmin(admin.ModelAdmin):
     fieldsets = [
@@ -184,8 +182,10 @@ class ReplyAdmin(admin.ModelAdmin):
         (None, {'fields': ['delete']}),
     ]
 
-    list_display = ('id', 'creator', 'content', 'receiver', 'comment', 'ip_attribution', 'created_date', 'delete')
+    list_display = ('id', 'creator', 'content', 'receiver',
+                    'comment', 'ip_attribution', 'created_date', 'delete')
     list_filter = ['created_date']
     search_fields = ['content']
+
 
 admin.site.register(Reply, ReplyAdmin)

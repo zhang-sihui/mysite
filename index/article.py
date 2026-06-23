@@ -14,11 +14,11 @@ def get_article_count_from_categorys():
     categorys = Category.objects.filter(delete=False).order_by('name')
     category_to_article_count = {}
     for category in categorys:
-        articles_by_category = Article.objects.filter(category=category, status='pub')
+        articles_by_category = Article.objects.filter(category=category, delete=False)
         if articles_by_category:
             category_to_article_count[category.name] = len(articles_by_category)
     return category_to_article_count
-    
+
 
 def get_article_count_from_years():
     min_pub_date = Article.objects.aggregate(Min('pub_date'))['pub_date__min']
@@ -31,13 +31,13 @@ def get_article_count_from_years():
         years_list.append(i)
     year_to_article_count = {}
     for year in years_list:
-        articles_by_year = Article.objects.filter(pub_date__year=year, status='pub')
+        articles_by_year = Article.objects.filter(pub_date__year=year, delete=False)
         if articles_by_year:
             year_to_article_count[year] = len(articles_by_year)
     return year_to_article_count
 
 def articles(request):
-    articles = Article.objects.filter(status='pub').order_by('-pub_date')
+    articles = Article.objects.filter(delete=False).order_by('-pub_date')
     category_to_article_count = get_article_count_from_categorys()
     year_to_article_count = get_article_count_from_years()
     return render(request, 'index/article.html', locals())
@@ -49,14 +49,14 @@ def article_body(request, article_id):
     article.latest_viewing_date = timezone.now()
     article.latest_viewing_user = get_user_ip(request)
     article.save()
-    extensions = [ 'markdown.extensions.extra', 'markdown.extensions.codehilite', 'markdown.extensions.toc']
+    extensions = ['markdown.extensions.extra', 'markdown.extensions.codehilite', 'markdown.extensions.toc']
     article.body = markdown.markdown(article.body, extensions=extensions)
     category_to_article_count = get_article_count_from_categorys()
     year_to_article_count = get_article_count_from_years()
     # 获取指定文章下的所有评论及其回复
     comments = Comment.objects.filter(delete=False, article_id=article_id).prefetch_related(
-            Prefetch('reply_set', queryset=Reply.objects.filter(delete=False))
-        ).order_by('-created_date')
+        Prefetch('reply_set', queryset=Reply.objects.filter(delete=False))
+    ).order_by('-created_date')
     comment_ids = []
     for comment in comments:
         comment_ids.append(comment.id)
@@ -94,8 +94,8 @@ def article_body(request, article_id):
 
 def get_search_articles(request):
     q = request.GET.get('q')
-    articles = Article.objects.all().filter(status='pub').order_by('-pub_date')
-    search_articles = Article.objects.filter(title__icontains=q, status='pub')
+    articles = Article.objects.all().filter(delete=False).order_by('-pub_date')
+    search_articles = Article.objects.filter(title__icontains=q, delete=False)
     search_articles_count = len(search_articles)
     success_search_msg = '{} results for {}'.format(search_articles_count, q)
     not_search_msg = 'No {} '.format(q)
@@ -105,14 +105,14 @@ def get_search_articles(request):
 
 
 def get_articles_by_category(request, category):
-    articles = Article.objects.filter(category=category, status='pub').order_by('-pub_date')
+    articles = Article.objects.filter(category=category, delete=False).order_by('-pub_date')
     category_to_article_count = get_article_count_from_categorys()
     year_to_article_count = get_article_count_from_years()
     return render(request, 'index/articles_by_category.html', locals())
 
 
 def get_articles_by_year(request, year):
-    articles = Article.objects.filter(pub_date__year=year, status='pub').order_by('-pub_date')
+    articles = Article.objects.filter(pub_date__year=year, delete=False).order_by('-pub_date')
     category_to_article_count = get_article_count_from_categorys()
     year_to_article_count = get_article_count_from_years()
     return render(request, 'index/articles_by_year.html', locals())

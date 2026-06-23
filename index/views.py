@@ -19,7 +19,7 @@ def index(request):
     today_visits = add_one_visit(request)
     total_visits = get_total_visit()
     localtime = timezone.now()
-    latest_article = Article.objects.filter(status='pub').order_by('-pub_date').first()
+    latest_article = Article.objects.filter(delete=False).order_by('-pub_date').first()
     if latest_article:
         summary_text = latest_article.body.replace('#', ' ')
         if len(summary_text) > 100:
@@ -82,7 +82,7 @@ def get_user_ip(request):
 
 
 def get_ip_attribution(ip):
-    apikey = settings.CONFIG_DATA.get('ip_api_key', None)
+    apikey = settings.IP_API_KEY
     if not apikey:
         return ip
     url = "http://api.tianapi.com/txapi/ipquery/index?key={}&ip={}".format(apikey, ip)
