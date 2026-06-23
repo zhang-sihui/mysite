@@ -1,5 +1,5 @@
 from django.urls import path, re_path
-from . import views, article, file, messages, users, comments
+from . import views, article, file, users, comments
 
 app_name = 'index'
 
@@ -17,8 +17,8 @@ urlpatterns = [
     # 回复
     re_path('add_reply/(?P<pathname>[\\a-zA-Z0-9]*)/', comments.add_reply, name='add_reply'),
     # 留言
-    path('messages', messages.messages, name='messages'),
-    path('add_message', messages.add_message, name='add_message'),
+    path('messages', comments.messages, name='messages'),
+    path('add_message', comments.add_message, name='add_message'),
     # 文件
     path('files', file.files, name='files'),
     path('upload', file.upload, name='upload'),

@@ -128,9 +128,9 @@
                                     </div>
                                     <div class="font-weight-bold mb-1">{{ comment.content }}</div>
                                     <div class="tools d-inline-block w-100">
-                                        {% if comment.reply_set.all %}
+                                        {% if comment.reply_set %}
                                         <a href="#" class="text-primary" id="expandReplyButton{{comment.id}}">
-                                            {{ 'fold'|translate_str }}({{ comment.reply_set.all|length }})
+                                            {{ 'fold'|translate_str }}({{ comment.reply_set|length }})
                                         </a>
                                         {% endif %}
                                         <button class="float-right btn btn-light btn-sm" type="button" id="replyButton{{comment.id}}">
@@ -156,17 +156,23 @@
                                         </div>
                                         <div class="row my-1"></div>
                                     </div>
-                                    {% if comment.reply_set.all %}
+                                    {% if comment.reply_set %}
                                     <div class="card pl-2 pt-1 pr-2" id="allReplyDiv{{comment.id}}">
-                                        {% for reply in comment.reply_set.all %}
+                                        {% for reply in comment.reply_set %}
                                         <div class="d-flex">
                                             <div class="bg-secondary text-white rounded custom_reply_avatar">
                                                 {{ reply.creator|slice:'0:1'|capfirst }}
                                             </div>
                                             <div class="pl-1 bd-highlight flex-fill">
                                                 <div class="text-black-50 custom_reply-info">
-                                                    <span class="mr-2">{{ reply.creator }} @{{ reply.receiver }}</span>
-                                                    <span>{{ reply.create_date|date:'Y-m-d H:i' }}</span>
+                                                    <span>
+                                                        <span class="font-weight-bold">
+                                                            {{ reply.creator }}
+                                                            {{ reply.create_date|date:'Y-m-d H:i' }}
+                                                        </span>
+                                                        {% if reply.reply_to_id != reply.root_id %} @#{{ comment.reply_id_map|get_item:reply.reply_to_id }} {{ reply.reply_to_creator }}{% endif %}
+                                                    </span>
+                                                    <span class="ms-auto fw-bold float-right">#{{ forloop.counter }}</span>
                                                 </div>
                                                 <div class="font-weight-bold">{{ reply.content }}</div>
                                                 <div class="tools d-inline-block w-100">

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import IP, Visit, About, Article, File, Author, Category, Message, User, Comment, Reply
+from .models import IP, Visit, About, Article, File, Author, Category, User, Comment
 
 # Register your models here.
 
@@ -112,23 +112,6 @@ class FileAdmin(admin.ModelAdmin):
 admin.site.register(File, FileAdmin)
 
 
-class MessageAdmin(admin.ModelAdmin):
-    fieldsets = [
-        (None, {'fields': ['creator']}),
-        (None, {'fields': ['ip_attribution']}),
-        ('Date information', {'fields': ['create_date'], 'classes': ['collapse']}),
-        (None, {'fields': ['content']}),
-        (None, {'fields': ['parent_id']}),
-        (None, {'fields': ['delete']}),
-    ]
-    list_display = ('id', 'creator', 'ip_attribution', 'content', 'parent_id', 'create_date', 'delete')
-    list_filter = ['create_date']
-    search_fields = ['creator', 'content']
-
-
-admin.site.register(Message, MessageAdmin)
-
-
 class UserAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {'fields': ['username']}),
@@ -151,33 +134,18 @@ class CommentAdmin(admin.ModelAdmin):
         (None, {'fields': ['creator']}),
         (None, {'fields': ['content']}),
         (None, {'fields': ['ip_attribution']}),
-        (None, {'fields': ['article_id']}),
+        (None, {'fields': ['article']}),
+        (None, {'fields': ['root_id']}),
+        (None, {'fields': ['reply_to_id']}),
+        (None, {'fields': ['reply_to_creator']}),
         (None, {'fields': ['create_date']}),
         (None, {'fields': ['delete']}),
     ]
 
-    list_display = ('id', 'creator', 'content', 'ip_attribution', 'article_id', 'create_date', 'delete')
+    list_display = ('id', 'creator', 'content', 'article',
+                    'root_id', 'reply_to_id', 'reply_to_creator', 'create_date', 'delete')
     list_filter = ['create_date']
     search_fields = ['content']
 
 
 admin.site.register(Comment, CommentAdmin)
-
-
-class ReplyAdmin(admin.ModelAdmin):
-    fieldsets = [
-        (None, {'fields': ['creator']}),
-        (None, {'fields': ['content']}),
-        (None, {'fields': ['receiver']}),
-        (None, {'fields': ['comment']}),
-        (None, {'fields': ['ip_attribution']}),
-        (None, {'fields': ['create_date']}),
-        (None, {'fields': ['delete']}),
-    ]
-
-    list_display = ('id', 'creator', 'content', 'receiver', 'comment', 'ip_attribution', 'create_date', 'delete')
-    list_filter = ['create_date']
-    search_fields = ['content']
-
-
-admin.site.register(Reply, ReplyAdmin)

@@ -1,11 +1,12 @@
 import json
 import datetime
 import markdown
-from django.db.models import Min, Max, Prefetch
+from collections import defaultdict
+from django.db.models import Min, Max
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from .views import get_user_ip
-from .models import Article, Category, Comment, Reply
+from .models import Article, Category, Comment
 from .forms import CommentForm, initial_register_form, initial_login_form
 from .common import translate_message
 
@@ -54,12 +55,17 @@ def article_body(request, article_id):
     category_to_article_count = get_article_count_from_categorys()
     year_to_article_count = get_article_count_from_years()
     # 获取指定文章下的所有评论及其回复
-    comments = Comment.objects.filter(delete=False, article_id=article_id).prefetch_related(
-        Prefetch('reply_set', queryset=Reply.objects.filter(delete=False))
-    ).order_by('-create_date')
-    comment_ids = []
-    for comment in comments:
-        comment_ids.append(comment.id)
+    roots = Comment.objects.filter(delete=False, article_id=article_id, root_id=0).order_by('-create_date')
+    root_ids = roots.values_list('id', flat=True)
+    replies = Comment.objects.filter(delete=False, root_id__in=root_ids).order_by('create_date')
+    reply_groups = defaultdict(list)
+    for r in replies:
+        reply_groups[r.root_id].append(r)
+    for root in roots:
+        root.reply_set = reply_groups.get(root.id, [])
+        root.reply_id_map = {r.id: i+1 for i, r in enumerate(root.reply_set)}
+    comments = list(roots)
+    comment_ids = list(root_ids)
     comments_id = json.dumps(comment_ids)
     login_form = initial_login_form(request)
     register_form = initial_register_form(request)

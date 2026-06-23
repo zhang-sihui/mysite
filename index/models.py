@@ -81,16 +81,6 @@ class File(models.Model):
     delete = models.BooleanField(translate_message('delete'), default=False)
 
 
-class Message(models.Model):
-    creator = models.CharField(translate_message('creator'), max_length=16)
-    content = models.TextField(translate_message('content'), max_length=512)
-    ip_attribution = models.CharField(translate_message('ip_attribution'),
-                                      max_length=64, default='', blank=True, null=True)
-    parent_id = models.IntegerField(translate_message('parent_id'), default=0)
-    create_date = models.DateTimeField(translate_message('create_date'), default=timezone.now)
-    delete = models.BooleanField(translate_message('delete'), default=False)
-
-
 class User(models.Model):
     username = models.CharField(translate_message('username'), max_length=16, blank=True, unique=True)
     password = models.CharField(translate_message('password'), max_length=16, blank=True)
@@ -104,19 +94,16 @@ class Comment(models.Model):
     content = models.TextField(translate_message('content'), max_length=512)
     ip_attribution = models.CharField(translate_message('ip_attribution'),
                                       max_length=64, default='', blank=True, null=True)
-    article_id = models.IntegerField(translate_message('related_article'), default=1)
     create_date = models.DateTimeField(translate_message('create_date'), default=timezone.now)
     delete = models.BooleanField(translate_message('delete'), default=False)
+    article = models.ForeignKey('Article', on_delete=models.CASCADE,
+                                null=True, blank=True,
+                                verbose_name=translate_message('related_article'))
+    root_id = models.IntegerField(default=0)
+    reply_to_id = models.IntegerField(default=0)
+    reply_to_creator = models.CharField(max_length=16, blank=True, default='')
 
-
-class Reply(models.Model):
-    creator = models.CharField(translate_message('creator'), max_length=16)
-    content = models.TextField(translate_message('content'), max_length=512)
-    receiver = models.CharField(translate_message('receiver'), max_length=16)
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE,
-                                limit_choices_to={'delete': False}, null=True,
-                                verbose_name=translate_message('related_comment'))
-    ip_attribution = models.CharField(translate_message('ip_attribution'),
-                                      max_length=64, default='', blank=True, null=True)
-    create_date = models.DateTimeField(translate_message('create_date'), default=timezone.now)
-    delete = models.BooleanField(translate_message('delete'), default=False)
+    class Meta:
+        indexes = [
+            models.Index(fields=['article', 'root_id']),
+        ]

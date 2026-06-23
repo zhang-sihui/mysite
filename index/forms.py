@@ -2,10 +2,6 @@ from django import forms
 from .common import translate_message
 
 
-class MessageForm(forms.Form):
-    content = forms.CharField(label=translate_message('content'), max_length=512, 
-                              widget=forms.Textarea(attrs={'class': 'form-control form-control-sm', 'rows': 3}))
-
 class LoginForm(forms.Form):
     username = forms.CharField(label=translate_message('username'), max_length=16,
                                widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -23,10 +19,6 @@ class RegisterForm(forms.Form):
                              widget=forms.TextInput(attrs={'class': 'form-control'}), required=False)
 
 class CommentForm(forms.Form):
-    content = forms.CharField(label=translate_message('content'), max_length=512, min_length=1,
-                              widget=forms.Textarea(attrs={'class': 'form-control form-control-sm', 'rows': 3}))
-
-class ReplyForm(forms.Form):
     content = forms.CharField(label=translate_message('content'), max_length=512, min_length=1,
                               widget=forms.Textarea(attrs={'class': 'form-control form-control-sm', 'rows': 3}))
 
