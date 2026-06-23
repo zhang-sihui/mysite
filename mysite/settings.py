@@ -22,16 +22,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-lnbq42)tl57nu^_ze9kg*(tf6i$_icbcif=2kex!^lzdvuk8#h'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-dev-only-key-do-not-use-in-production')
 
 SESSION_COOKIE_AGE = 3600 * 24 * 3
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-if DEBUG:
-    ALLOWED_HOSTS = []
-else:
-    ALLOWED_HOSTS = ['*']
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '*').split(',')
 
 # Application definition
 
@@ -137,11 +134,7 @@ STATIC_ROOT = BASE_DIR / 'static'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # config data
-try:
-    with open(os.path.join(BASE_DIR, 'config.json'), 'r') as config_file:
-        CONFIG_DATA = json.load(config_file)
-except Exception as e:
-    CONFIG_DATA = {}
+IP_API_KEY = os.environ.get('IP_API_KEY', None)
 
 # translations data
 try:
