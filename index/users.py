@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from .forms import LoginForm, RegisterForm
 from .models import User
 
@@ -16,8 +16,10 @@ def login(request, pathname):
             username = login_form.cleaned_data['username']
             request.session['login_username'] = username
             password = login_form.cleaned_data['password']
-            try:
-                user_data = User.objects.get(username=username)
+            user_data = User.objects.filter(username=username, delete=False).first()
+            if not user_data:
+                request.session['user_not_exist'] = True
+            else:
                 if user_data.password == password:
                     request.session['logged'] = True
                     request.session['id'] = user_data.id
@@ -26,8 +28,6 @@ def login(request, pathname):
                     return redirect(f'{pathname}')
                 else:
                     request.session['incorrect_password'] = True
-            except:
-                request.session['user_not_exist'] = True
         return redirect(f'{pathname}')
 
 def logout(request, pathname):

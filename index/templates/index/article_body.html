@@ -7,17 +7,17 @@
     <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8">
         <div class="card">
             <div class="card-header">
-                <h2>{{ article.title }} 
-                    <a class="text-dark float-right" href="{% url 'index:articles' %}" 
+                <h2>{{ article.title }}
+                    <a class="text-dark float-right" href="{% url 'index:articles' %}"
                         title="{{ 'All articles'|translate_str }}" data-toggle="tooltip" data-html="true" data-placement="top">
                         <i class="fa fa-table-list"></i>
                     </a>
-                </h2> 
+                </h2>
                 <small>
                     <i class="fa-solid fa-user"></i> {{ article.author }} &ensp;
                     <a class="text-dark" href="#" data-toggle="tooltip" data-html="true" data-placement="bottom"
-                        title="{{ 'Publish'|translate_str }}: {{ article.pub_date|date:'Y-m-d H:i:s' }} <br> {{ 'Modify'|translate_str }}: {{ article.mod_date|date:'Y-m-d H:i:s' }}">
-                        <span> <i class="fa fa-calendar"></i> {{ article.pub_date|date:'Y-m-d H:i' }} </span>
+                        title="{{ 'Publish'|translate_str }}: {{ article.create_date|date:'Y-m-d H:i:s' }} <br> {{ 'Modify'|translate_str }}: {{ article.mod_date|date:'Y-m-d H:i:s' }}">
+                        <span> <i class="fa fa-calendar"></i> {{ article.create_date|date:'Y-m-d H:i' }} </span>
                     </a> &ensp;
                     <i class="fa fa-tag"></i>
                     <a class="text-dark font-italic"
@@ -124,7 +124,7 @@
                                 <div class="p-1 flex-fill">
                                     <div class="text-black-50 custom_comment-info">
                                         <span class="mr-2">{{ comment.creator }}</span>
-                                        <span>{{ comment.created_date|date:'Y-m-d H:i' }}</span>
+                                        <span>{{ comment.create_date|date:'Y-m-d H:i' }}</span>
                                     </div>
                                     <div class="font-weight-bold mb-1">{{ comment.content }}</div>
                                     <div class="tools d-inline-block w-100">
@@ -166,7 +166,7 @@
                                             <div class="pl-1 bd-highlight flex-fill">
                                                 <div class="text-black-50 custom_reply-info">
                                                     <span class="mr-2">{{ reply.creator }} @{{ reply.receiver }}</span>
-                                                    <span>{{ reply.created_date|date:'Y-m-d H:i' }}</span>
+                                                    <span>{{ reply.create_date|date:'Y-m-d H:i' }}</span>
                                                 </div>
                                                 <div class="font-weight-bold">{{ reply.content }}</div>
                                                 <div class="tools d-inline-block w-100">

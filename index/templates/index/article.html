@@ -27,7 +27,7 @@
                             href="{% url 'index:article_body' article.id %}">{{ article.title }}</a>
                         </h4>
                         <span class="text-muted">
-                            posted @ {{ article.pub_date|date:'Y-m-d H:i' }}
+                            posted @ {{ article.create_date|date:'Y-m-d H:i' }}
                             &ensp; <i class="fa-solid fa-user"></i> {{ article.author }}
                             &ensp; <i class="fa fa-eye"></i> {{ article.views }}
                         </span>

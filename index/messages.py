@@ -62,7 +62,7 @@ def add_message(request):
     return render(request, 'index/messages.html', locals())
 
 def get_messages():
-    message_data = Message.objects.filter(delete=False).order_by('-created_date')
+    message_data = Message.objects.filter(delete=False).order_by('-create_date')
     messages = []
     for item in message_data:
         if item.parent_id == 0:

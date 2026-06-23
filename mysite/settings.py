@@ -133,14 +133,18 @@ STATIC_ROOT = BASE_DIR / 'static'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# config data
+# ip attribution api key
 IP_API_KEY = os.environ.get('IP_API_KEY', None)
+
+# file upload settings
+MAX_FILE_SIZE = 5 * 1024 * 1024
+MAX_TOTAL_STORAGE = 200 * 1024 * 1024
 
 # translations data
 try:
     with open(os.path.join(BASE_DIR, 'translation.json'), 'r', encoding='utf8') as translation_file:
         TRANSLATIONS_DATA = json.load(translation_file)
-except Exception as e:
+except Exception:
     TRANSLATIONS_DATA = {
         "html": {},
         "code": {}

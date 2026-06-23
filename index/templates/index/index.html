@@ -82,7 +82,7 @@
                         <h2><a class="text-dark font-italic font-weight-bold"
                                 href="{% url 'index:article_body' latest_article.id %}">{{ latest_article.title }}</a></h2>
                     </div>
-                    <div class="text-muted">Posted @{{ latest_article.author }}  {{ latest_article.pub_date|date:'Y-m-d H:i' }}</div>
+                    <div class="text-muted">Posted @{{ latest_article.author }}  {{ latest_article.create_date|date:'Y-m-d H:i' }}</div>
                     <div class="row my-1"></div>
                     <div>{{ latest_article.summary|safe }}</div>
                     {% endif %}

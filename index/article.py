@@ -21,23 +21,23 @@ def get_article_count_from_categorys():
 
 
 def get_article_count_from_years():
-    min_pub_date = Article.objects.aggregate(Min('pub_date'))['pub_date__min']
-    min_pub_date_year = min_pub_date.year if min_pub_date else datetime.datetime.now().year
-    max_pub_date = Article.objects.aggregate(Max('pub_date'))['pub_date__max']
-    max_pub_date_year = max_pub_date.year if max_pub_date else datetime.datetime.now().year
+    min_create_date = Article.objects.aggregate(Min('create_date'))['create_date__min']
+    min_create_date_year = min_create_date.year if min_create_date else datetime.datetime.now().year
+    max_create_date = Article.objects.aggregate(Max('create_date'))['create_date__max']
+    max_create_date_year = max_create_date.year if max_create_date else datetime.datetime.now().year
 
     years_list = []
-    for i in range(max_pub_date_year, min_pub_date_year - 1, -1):
+    for i in range(max_create_date_year, min_create_date_year - 1, -1):
         years_list.append(i)
     year_to_article_count = {}
     for year in years_list:
-        articles_by_year = Article.objects.filter(pub_date__year=year, delete=False)
+        articles_by_year = Article.objects.filter(create_date__year=year, delete=False)
         if articles_by_year:
             year_to_article_count[year] = len(articles_by_year)
     return year_to_article_count
 
 def articles(request):
-    articles = Article.objects.filter(delete=False).order_by('-pub_date')
+    articles = Article.objects.filter(delete=False).order_by('-create_date')
     category_to_article_count = get_article_count_from_categorys()
     year_to_article_count = get_article_count_from_years()
     return render(request, 'index/article.html', locals())
@@ -56,7 +56,7 @@ def article_body(request, article_id):
     # 获取指定文章下的所有评论及其回复
     comments = Comment.objects.filter(delete=False, article_id=article_id).prefetch_related(
         Prefetch('reply_set', queryset=Reply.objects.filter(delete=False))
-    ).order_by('-created_date')
+    ).order_by('-create_date')
     comment_ids = []
     for comment in comments:
         comment_ids.append(comment.id)
@@ -94,7 +94,7 @@ def article_body(request, article_id):
 
 def get_search_articles(request):
     q = request.GET.get('q')
-    articles = Article.objects.all().filter(delete=False).order_by('-pub_date')
+    articles = Article.objects.all().filter(delete=False).order_by('-create_date')
     search_articles = Article.objects.filter(title__icontains=q, delete=False)
     search_articles_count = len(search_articles)
     success_search_msg = '{} results for {}'.format(search_articles_count, q)
@@ -105,14 +105,14 @@ def get_search_articles(request):
 
 
 def get_articles_by_category(request, category):
-    articles = Article.objects.filter(category=category, delete=False).order_by('-pub_date')
+    articles = Article.objects.filter(category=category, delete=False).order_by('-create_date')
     category_to_article_count = get_article_count_from_categorys()
     year_to_article_count = get_article_count_from_years()
     return render(request, 'index/articles_by_category.html', locals())
 
 
 def get_articles_by_year(request, year):
-    articles = Article.objects.filter(pub_date__year=year, delete=False).order_by('-pub_date')
+    articles = Article.objects.filter(create_date__year=year, delete=False).order_by('-create_date')
     category_to_article_count = get_article_count_from_categorys()
     year_to_article_count = get_article_count_from_years()
     return render(request, 'index/articles_by_year.html', locals())

@@ -11,7 +11,7 @@
                     <span><strong>{{ search_articles|length }}</strong> {{ 'articles are as follows'|translate_str }}: </span>
                 </div>
                 <div class="float-right">
-                    <a class="text-dark float-right ml-1 pt-1" href="{% url 'index:articles' %}" 
+                    <a class="text-dark float-right ml-1 pt-1" href="{% url 'index:articles' %}"
                         title="{{ 'All articles'|translate_str }}" data-toggle="tooltip" data-html="true" data-placement="top">
                         <i class="fa fa-table-list fa-2x"></i>
                     </a>
@@ -39,7 +39,7 @@
                             href="{% url 'index:article_body' search_article.id %}">{{ search_article.title }}</a>
                         </h4>
                         <span class="text-muted">
-                            posted @ {{ search_article.pub_date|date:'Y-m-d H:i' }}
+                            posted @ {{ search_article.create_date|date:'Y-m-d H:i' }}
                             &ensp; <i class="fa-solid fa-user"></i> {{ search_article.author }}
                             &ensp; <i class="fa fa-eye"></i> {{ search_article.views }}
                         </span>
@@ -61,7 +61,7 @@
                             href="{% url 'index:article_body' article.id %}">{{ article.title }}</a>
                         </h4>
                         <span class="text-muted">
-                            posted @ {{ article.pub_date|date:'Y-m-d H:i' }}
+                            posted @ {{ article.create_date|date:'Y-m-d H:i' }}
                             &ensp; <i class="fa-solid fa-user"></i> {{ article.author }}
                             &ensp; <i class="fa fa-eye"></i> {{ article.views }}
                         </span>

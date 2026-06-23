@@ -19,7 +19,7 @@ def index(request):
     today_visits = add_one_visit(request)
     total_visits = get_total_visit()
     localtime = timezone.now()
-    latest_article = Article.objects.filter(delete=False).order_by('-pub_date').first()
+    latest_article = Article.objects.filter(delete=False).order_by('-create_date').first()
     if latest_article:
         summary_text = latest_article.body.replace('#', ' ')
         if len(summary_text) > 100:
@@ -102,7 +102,7 @@ def get_ip_attribution(ip):
 
 def about(request):
     # 返回日期最近的一条
-    about = About.objects.all().order_by('-pub_date').first()
+    about = About.objects.all().order_by('-create_date').first()
     if about:
         extensions = ['markdown.extensions.extra', 'markdown.extensions.codehilite', 'markdown.extensions.toc']
         about.content = markdown.markdown(about.content, extensions=extensions)

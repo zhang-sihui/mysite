@@ -15,37 +15,97 @@
         <div class="text-center h6">
             <span><i class="fa fa-cloud-upload" aria-hidden="true"></i> {{ 'File upload'|translate_str }}</span>
             <small><a class="text-dark" href="{% url 'index:upload' %}">
-                <i class="fa fa-refresh" aria-hidden="true"></i></a></small>
+                    <i class="fa fa-refresh" aria-hidden="true"></i></a></small>
         </div>
     </div>
     <div class="card-body">
-        <div class="col-xl-6 offset-xl-4 col-lg-6 offset-lg-4 col-md-8 offset-md-2 col-sm-12 col-12">
-            <form class="form-inline mx-auto" action="" method="POST" enctype="multipart/form-data">
+        <div class="col-xl-6 offset-xl-3 col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-sm-12 col-12">
+            <form class="form-inline mx-auto" id="uploadForm" action="" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                <input class="form-control border border-secondary" type="text" id="textfield" style="width:200px" disabled/>
-                <label class="btn btn-light border border-secondary" for="customFile" style="margin: 3px">{{ 'Select file'|translate_str }}</label>
-                <input class="form-control" type="file" name="file" id="customFile" style="display:none;"
-                       onchange="document.getElementById('textfield').value=this.files[0].name"/>
-                <input class="btn btn-light border border-secondary" type="submit" value=" {{ 'Submit'|translate_str }} "/>
+                <input class="form-control border border-secondary flex-fill" type="text" id="textfield" disabled />
+                <label class="btn btn-light border border-secondary" for="customFile" style="margin: 3px">
+                    {{ 'Select file'|translate_str }}</label>
+                <input class="form-control flex-fill" type="file" name="file" id="customFile" style="display:none;"
+                    onchange="document.getElementById('textfield').value=this.files[0].name" />
+                <input class="btn btn-light border border-secondary" type="button" id="submitUploadButton"
+                    value=" {{ 'Submit'|translate_str }} " />
             </form>
+            <div class="p-2 mb-2 bg-warning text-dark my-1" style="display: none;" id="errorDiv"></div>
+            {% if not request.session.logged %}
+            <div class="text-dark d-inline-block">
+                <a href="" class="font-italic font-weight-bold" id="loginDiv" data-toggle="modal"
+                    data-target="#loginModal">
+                    {{ 'login'|translate_str }}</a>
+                {{ 'then upload a file'|translate_str }}
+            </div>
+            {% include 'index/login_modal.html' %}
+            <div class="text-dark d-inline-block">
+                {{ 'no account'|translate_str }}
+                <a href="" class="font-italic font-weight-bold" id="registerDiv" data-toggle="modal"
+                    data-target="#registerModal">
+                    {{ 'register'|translate_str }}
+                </a>
+            </div>
+            {% include 'index/register_modal.html' %}
+            {% endif %}
         </div>
     </div>
     <div class="card-footer">
         {% if not_file_message %}
-            <div class="text-center"><strong class="text-info">{{ not_file_message }}</strong></div>
+        <div class="text-center"><strong class="text-info">{{ not_file_message }}</strong></div>
         {% endif %}
         {% if error_file_name_message %}
-            <div class="text-center"><strong class="text-info">{{ error_file_name_message }}</strong></div>
+        <div class="text-center"><strong class="text-info">{{ error_file_name_message }}</strong></div>
         {% endif %}
         {% if error_file_size_message %}
-            <div class="text-center"><strong class="text-info">{{ error_file_size_message }}</strong></div>
+        <div class="text-center"><strong class="text-info">{{ error_file_size_message }}</strong></div>
         {% endif %}
         {% if success_upload_message %}
-            <div class="text-center"><strong class="text-info">{{ success_upload_message }}</strong></div>
+        <div class="text-center"><strong class="text-info">{{ success_upload_message }}</strong></div>
         {% endif %}
         {% if over_files_size_message %}
-            <div class="text-center"><strong class="text-info">{{ over_files_size_message }}</strong></div>
+        <div class="text-center"><strong class="text-info">{{ over_files_size_message }}</strong></div>
+        {% endif %}
+        {% if login_error_msg %}
+        <div class="text-center"><strong class="text-info">{{ login_error_msg }}</strong></div>
+        {% endif %}
+        {% if login_info_msg %}
+        <div class="text-center"><strong class="text-success">{{ login_info_msg }}</strong></div>
+        {% endif %}
+        {% if register_error_msg %}
+        <div class="text-center"><strong class="text-info">{{ register_error_msg }}</strong></div>
+        {% endif %}
+        {% if no_login_msg %}
+        <div class="text-center"><strong class="text-info">{{ no_login_msg }}</strong></div>
         {% endif %}
     </div>
 </div>
+
+<script>
+    $('#submitUploadButton').click(() => {
+        const logged = "{{ request.session.logged|default:'False' }}";
+        if (logged === "True") {
+            $("#uploadForm").submit();
+        } else {
+            $('#errorDiv').css('display', 'block');
+            const error_login = "{{ 'no login'|translate_str }}";
+            $('#errorDiv').text(error_login);
+        }
+    });
+
+    const incorrect_password = "{{ incorrect_password }}";
+    const user_not_exist = "{{ user_not_exist }}";
+    const register_success = "{{ register_success }}";
+    console.log(incorrect_password, user_not_exist, register_success);
+    if (incorrect_password === "True" || user_not_exist === "True" || register_success == "True") {
+        $("#loginDiv").click();
+    }
+
+    const user_exist = "{{ user_exist }}";
+    const different_passwords = "{{ different_passwords }}";
+    const invalid_email = "{{ invalid_email }}";
+    if (user_exist === "True" || different_passwords === "True" || invalid_email === "True") {
+        $("#registerDiv").click();
+    }
+</script>
 {% endblock %}

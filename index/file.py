@@ -5,6 +5,7 @@
 
 import os
 from django.db.models import Sum
+from django.conf import settings
 from django.http import FileResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.utils.encoding import escape_uri_path
@@ -12,6 +13,7 @@ from django.shortcuts import render
 from .models import File
 from .common import translate_message
 from . import base_dir
+from .forms import initial_login_form, initial_register_form
 
 
 # Create your views here.
@@ -35,7 +37,7 @@ def files(request):
                 file_info.id,
                 file_display_name,
                 file_info.downloads,
-                file_info.pub_date
+                file_info.create_date
             )
             not_sorted_files_data.append(file_data)
         files_data = sorted(not_sorted_files_data,
@@ -44,7 +46,32 @@ def files(request):
 
 
 def upload(request):
+    pathname = "upload"
+    login_form = initial_login_form(request)
+    register_form = initial_register_form(request)
+    logged = request.session.get('logged', False)
+    incorrect_password = request.session.pop('incorrect_password', False)
+    if incorrect_password:
+        login_error_msg = translate_message('The password is incorrect')
+    user_not_exist = request.session.pop('user_not_exist', False)
+    if user_not_exist:
+        login_error_msg = translate_message('User does not exist')
+    register_success = request.session.pop('register_success', False)
+    if register_success:
+        login_info_msg = translate_message('register success')
+    user_exist = request.session.pop('user_exist', False)
+    if user_exist:
+        register_error_msg = translate_message('The user already exists, please modify the username')
+    different_passwords = request.session.pop('different_passwords', False)
+    if different_passwords:
+        register_error_msg = translate_message('The passwords entered twice are different')
+    invalid_email = request.session.pop('invalid_email', False)
+    if invalid_email:
+        register_error_msg = translate_message('valid email')
     if request.method == 'POST':
+        if not logged:
+            no_login_msg = translate_message('no login data')
+            return render(request, 'index/upload.html', locals())
         file_data = request.FILES.get('file')
         if not file_data:
             not_file_message = translate_message(
@@ -61,12 +88,12 @@ def upload(request):
             error_file_name_message = translate_message(
                 'The length of the file name should not be less than 2. Please select the file again')
             return render(request, 'index/upload.html', locals())
-        if file_data.size > 5 * 1024 * 1024:
+        if file_data.size > settings.MAX_FILE_SIZE:
             error_file_size_message = translate_message(
                 'The file size should be less than 5M. Please reselect the file')
             return render(request, 'index/upload.html', locals())
         files_size_dict = File.objects.aggregate(Sum('file_size'))
-        if files_size_dict['file_size__sum'] and files_size_dict['file_size__sum'] > 200 * 1024 * 1024:  # 总文件大小超过 300M
+        if files_size_dict['file_size__sum'] and files_size_dict['file_size__sum'] > settings.MAX_TOTAL_STORAGE:
             over_files_size_message = translate_message(
                 'The file system is running low on memory. Please try again later or contact website management')
             return render(request, 'index/upload.html', locals())
@@ -75,6 +102,7 @@ def upload(request):
             new_file = File.objects.create()
             new_file.file_name = file_name
             new_file.file_size = file_data.size
+            new_file.create_user = request.session['id']
             new_file.save()
         handle_uploaded_file(file_data, file_name)
         success_upload_message = f'{file_name} ' + \
@@ -86,7 +114,7 @@ def upload(request):
 def handle_uploaded_file(file_data, filename):
     file_upload_path = os.path.join(base_dir, 'files')
     if not os.path.exists(file_upload_path):
-        os.makedirs(file_upload_path)
+        os.makedirs(file_upload_path, exist_ok=True)
     with open(file_upload_path + '/' + filename, 'wb+') as f:
         for chunk in file_data.chunks():
             f.write(chunk)
