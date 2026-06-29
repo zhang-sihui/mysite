@@ -7,17 +7,18 @@
     <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8">
         <div class="card">
             <div class="card-header">
-                <span>{{ 'About'|translate_str }}
-                    <strong>{{ year }}</strong> {{ 'year'|translate_str }},
-                    <strong>{{ articles|length }}</strong> {{ 'articles are as follows'|translate_str }}:
-                </span>
-                <a class="text-dark float-right" href="{% url 'index:articles' %}"
-                    title="{{ 'All articles'|translate_str }}" data-toggle="tooltip" data-html="true" data-placement="top">
-                    <i class="fa fa-table-list fa-2x"></i>
-                </a>
+                <div class="float-left">
+                    <span><strong>{{ articles|length }}</strong> {{ 'articles are as follows'|translate_str }}: </span>
+                </div>
+                <div class="float-right">
+                    <form class="form-inline" method="get" action="{% url 'index:get_search_articles' %}">
+                        {% csrf_token %}
+                        <input type="search" class="form-control" name="q" placeholder="Search" required> &nbsp;
+                        <button type="submit" class="btn btn-light border">{{ 'Search'|translate_str }}</button>
+                    </form>
+                </div>
             </div>
             <div class="card-body">
-                {% if articles %}
                 {% for article in articles %}
                 <div class="list-group">
                     <div class="list-group-item">
@@ -34,7 +35,6 @@
                 </div>
                 <div class="row my-1"></div>
                 {% endfor %}
-                {% endif %}
             </div>
         </div>
     </div>

@@ -8,7 +8,7 @@ urlpatterns = [
     path('about', views.about, name='about'),
     # 文章
     path('articles', article.articles, name='articles'),
-    path('articles/<int:article_id>', article.article_body, name='article_body'),
+    path('articles/<int:article_id>', article.article, name='article'),
     path('searchArticles', article.get_search_articles, name='get_search_articles'),
     path('articlesByCategory/<str:category>', article.get_articles_by_category, name='get_articles_by_category'),
     path('articlesByYear/<str:year>', article.get_articles_by_year, name='get_articles_by_year'),

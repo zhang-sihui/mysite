@@ -36,7 +36,7 @@
                     <div class="list-group-item">
                         <h4>
                             <a class="text-dark font-italic font-weight-bold"
-                            href="{% url 'index:article_body' search_article.id %}">{{ search_article.title }}</a>
+                            href="{% url 'index:article' search_article.id %}">{{ search_article.title }}</a>
                         </h4>
                         <span class="text-muted">
                             posted @ {{ search_article.create_date|date:'Y-m-d H:i' }}
@@ -58,7 +58,7 @@
                     <div class="list-group-item">
                         <h4>
                             <a class="text-dark font-italic font-weight-bold"
-                            href="{% url 'index:article_body' article.id %}">{{ article.title }}</a>
+                            href="{% url 'index:article' article.id %}">{{ article.title }}</a>
                         </h4>
                         <span class="text-muted">
                             posted @ {{ article.create_date|date:'Y-m-d H:i' }}

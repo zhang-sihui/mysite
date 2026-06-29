@@ -41,10 +41,10 @@ def articles(request):
     articles = Article.objects.filter(delete=False).order_by('-create_date')
     category_to_article_count = get_article_count_from_categorys()
     year_to_article_count = get_article_count_from_years()
-    return render(request, 'index/article.html', locals())
+    return render(request, 'index/articles.html', locals())
 
 
-def article_body(request, article_id):
+def article(request, article_id):
     article = get_object_or_404(Article, pk=int(article_id))
     article.views += 1
     article.latest_viewing_date = timezone.now()
@@ -95,7 +95,7 @@ def article_body(request, article_id):
     invalid_email = request.session.pop('invalid_email', False)
     if invalid_email:
         register_error_msg = translate_message('valid email')
-    return render(request, 'index/article_body.html', locals())
+    return render(request, 'index/article.html', locals())
 
 
 def get_search_articles(request):
