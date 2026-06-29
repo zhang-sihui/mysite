@@ -33,6 +33,13 @@ A personal website by Django.
 
 ## History
 
+v1.0.12: 2026/06/30
+
+- settings 文件中的 SECRET_KEY, DEBUG, ALLOWED_HOSTS, IP_API_KEY 值改为环境变量读取。
+- 模型表 Article 删除 status 字段，增加 delete 字段。
+- 上传文件需要先登录。
+- reply、message 模型表合并到 comment。
+
 v1.0.11: 2026/06/02
 
 - 修复拉取新代码时，执行 `python manage.py makemigrations` 没有正常迁移的问题。
