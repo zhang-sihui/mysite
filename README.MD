@@ -39,6 +39,9 @@ v1.0.12: 2026/06/30
 - 模型表 Article 删除 status 字段，增加 delete 字段。
 - 上传文件需要先登录。
 - reply、message 模型表合并到 comment。
+- 调整 article list 和 article body 对应 html 的文件名。
+- 调整文章页评论表单 padding，减少页面留白。
+- 登录后，没有 email 时，设置空默认值。
 
 v1.0.11: 2026/06/02
 
