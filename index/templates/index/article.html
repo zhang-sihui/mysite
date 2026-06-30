@@ -78,8 +78,8 @@
         <div class="row my-1"></div>
         <div class="card">
             <div class="card-header"><span><i class="fa-regular fa-comment"></i> {{ 'comment'|translate_str }} {{ comments|length }}</span></div>
-            <div class="card-body">
-                <div class="card-header">
+            <div class="card-body" style="padding: 0.75rem;">
+                <div class="card-header" style="padding: 0.25rem;">
                     <form class="" id="commentForm" method="post" action="{% url 'index:add_comment' article.id %}">
                         {% csrf_token %}
                         {{ comment_form.content.label_tag }} {{ comment_form.content }}

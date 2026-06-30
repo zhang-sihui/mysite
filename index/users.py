@@ -24,7 +24,7 @@ def login(request, pathname):
                     request.session['logged'] = True
                     request.session['id'] = user_data.id
                     request.session['username'] = user_data.username
-                    request.session['email'] = user_data.email
+                    request.session['email'] = user_data.email or ''
                     return redirect(f'{pathname}')
                 else:
                     request.session['incorrect_password'] = True
